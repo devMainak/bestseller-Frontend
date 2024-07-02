@@ -5,18 +5,21 @@ const Header = () => {
     <nav className="navbar navbar-expand-lg bg-danger-subtle">
       <div className="container container-fluid d-flex justify-content-between">
         <div>
-          <a className="navbar-brand text-danger fs-4 fw-semibold" href="#">
+          <Link className="navbar-brand text-danger fs-4 fw-semibold" to="/">
             bestseller
-          </a>
+          </Link>
         </div>
         <div>
           <form className="d-flex" role="search">
-            <input
-              className="form-control me-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
+            <div className='input-group'>
+              <span className='input-group-text bg-light'>🔍</span>
+              <input
+                className="form-control me-2"
+                type="search"
+                placeholder="Search for books"
+                aria-label="Search"
+              />
+            </div>
           </form>
         </div>
         <div>
