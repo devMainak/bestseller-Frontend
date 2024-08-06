@@ -1,9 +1,15 @@
 import { useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import Header from "../components/Header"
-import useFetch from "../useFetch"
+import { fetchBooks } from "./booksSlice"
 import { useParams } from "react-router-dom"
 
-const Books = () => {
+const BookList = () => {
+  // makig use of the useDispatch hook
+  const dispatch = useDispatch()
+
+
+  // State variable for the current state of books 
   const [booksToShow, setBooksToShow] = useState()
   const [priceSlider, setPriceSlider] = useState(100)
   const [categoryFilter, setCategoryFilter] = useState([])
@@ -31,18 +37,14 @@ const Books = () => {
     }
   ])
 
-  const { data, loading, error } = useFetch('https://9dbaed3b-94c5-4327-8a1b-6921422f3eba-00-32qwd9xgzzr57.pike.replit.dev/books')
-  const { bookCategory } = useParams('bookCategory')
-  
+  // Fetching books on page load using useEffect
   useEffect(() => {
-    
-    
-      if (data) {
-        setCategoryFilter(prevCategorise => [...prevCategorise, bookCategory])
-        setBooksToShow(data.data.books.filter((book) => categoryFilter.includes(book.categoryName)))
-      }
-    
-  }, [data, bookCategory])
+    dispatch(fetchBooks())
+  }, [])
+ 
+  
+  // Destructuring the booksSlice and accessing the store with useSelector
+  const { books, status, error } = useSelector(state => state.books)
 
   const handlePriceSlider = (event) => {
     const value = event.target.value
@@ -223,4 +225,4 @@ const Books = () => {
   )
 }
 
-export default Books
+export default BookList
