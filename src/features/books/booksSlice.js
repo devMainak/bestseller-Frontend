@@ -99,12 +99,12 @@
       //case for rejected status of the response
       builder.addCase(fetchBooks.rejected, (state, action) => {
        state.status = "error"
-       state.error = action.message
+       state.error = action.payload.error
       })
     }
   })
 
-  // 
+  // exporting the action creators
   export const { addToCategoryFilter, removeFromCategoryFilter, setPriceSlider, setSortByRating, clearFilters} = booksSlice.actions
 
   // exporting the reducer for the store
