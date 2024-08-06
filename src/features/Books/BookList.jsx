@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import Header from "../components/Header"
-import { fetchBooks, addToCategoryFilter, removeFromCategoryFilter, setPriceSlider, setSortByRating } from "./booksSlice"
+import { fetchBooks, addToCategoryFilter, removeFromCategoryFilter, setPriceSlider, setSortByRating, clearFilters } from "./booksSlice"
 import { useParams } from "react-router-dom"
 
 const BookList = () => {
@@ -22,7 +22,8 @@ const BookList = () => {
 
   // Function to set the priceSlider value upon change
   const handlePriceSlider = (event) => {
-    dispatch(setPriceSlider(event.target.value))
+    const value = event.target.value
+    dispatch(setPriceSlider(parseFloat(value)))
   }
 
   // Function to handle categories and categoryFilters
@@ -37,7 +38,13 @@ const BookList = () => {
 
   // Function to set the current rating filter
   const handleRatingFilter = (e) => {
-    dispatch(setSortByRating(parseFloat(e.target.value)))
+dispatch(setSortByRating(parseFloat(e.target.value)))
+  }
+
+  // Function to clear and reset all filters
+  const clearAllFilters = () => {
+    dispatch(clearFilters())
+    dispatch(addToCategoryFilter(bookCategory))
   }
 
   // Filtered books by category
@@ -48,28 +55,7 @@ const BookList = () => {
 
   // Sorted books by rating
   const sortedBooksByRating = sortedBooksByCategory.filter(book => book.rating >= sortByRating)
-  
 
-  const clearFilters = () => {
-    setPriceSlider(100)
-    setCategoryFilter([bookCategory])
-    setSelectedRating(6)
-    setCategories(prevCategories =>
-      prevCategories.map(category => ({
-        ...category,
-        checked: category.name === bookCategory
-      }))
-    )
-    
-    // const filteredBooks = data.data.books.filter(book => categoryFilter.includes(book.categoryName))
-    // setBooksToShow(filteredBooks)
-  }
-
-  // const handleClearButton = () => {
-  //   clearFilters()
-
-    
-  // }
   
   return (
     <>
@@ -79,7 +65,7 @@ const BookList = () => {
           <div className="align-items-start text-light bg-danger px-5 py-4" style={{minWidth: "3in", height: "100vh", position: "fixed"}}>
             <section className="py-3 d-flex justify-content-between">
               <lable className="fs-5 fw-normal">Filters</lable>
-              <button className="btn btn-outline-light fw-semibold" onClick={clearFilters}>Clear</button>
+              <button className="btn btn-outline-light fw-semibold" onClick={clearAllFilters}>Clear</button>
             </section>
             <section className="pb-4">
               <label for="priceRange" className="form-label fs-5 fw-normal">Price</label>
@@ -111,7 +97,7 @@ const BookList = () => {
               <br/>
               <label  className="pt-2"><input type="radio" name="rating" value={7} onChange={handleRatingFilter} /> 7 & above</label>
               <br/>
-              <label  className="pt-2"><input type="radio" name="rating" value={6} onChange={handleRatingFilter} checked={selectedRating === 6 ? true : false} /> 6 & above</label>
+              <label  className="pt-2"><input type="radio" name="rating" value={6} onChange={handleRatingFilter} checked={sortByRating === 6 ? true : false} /> 6 & above</label>
             </section>
             {/* <section className="pb-4">
               <label className="fs-5 fw-normal pb-2">Sort by</label>
@@ -122,9 +108,9 @@ const BookList = () => {
             </section> */}
           </div>
           <div className="py-4 container">
-            {booksToShow ? 
+            {sortedBooksByRating ? 
               <div className="row">
-                {booksToShow.map(book => {
+                {sortedBooksByRating.map(book => {
                 return (
                   <div className="col-sm-6">
                     <div className="card mb-3" style={{maxWidth: "540px"}}>

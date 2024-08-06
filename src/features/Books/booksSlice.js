@@ -69,8 +69,19 @@ export const booksSlice = createSlice({
     setPriceSlider: (state, action) => {
       state.priceSlider = action.payload
     },
+    // Setting the sortByRating value
     setSortByRating: (state, action) => {
       state.sortByRating = action.value
+    },
+    // clear all filters and reset
+    clearFilters: (state) => {
+      state.categoryFilter = []
+      state.priceSlider = 100
+      state.sortByRating = 6
+      state.categories = state.categories.map(category => {
+        category.checked = false
+        return category
+      })
     }
   },
   extraReducers: (builder) => {
@@ -94,7 +105,7 @@ export const booksSlice = createSlice({
 })
 
 // 
-export const { addToCategoryFilter, removeFromCategoryFilter, setPriceSlider } = booksSlice.actions
+export const { addToCategoryFilter, removeFromCategoryFilter, setPriceSlider, setSortByRating, clearFilters} = booksSlice.actions
 
 // exporting the reducer for the store
 export default booksSlice.reducer
