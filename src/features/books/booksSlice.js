@@ -19,6 +19,7 @@
       categoryFilter: [],
       priceSlider: 100,
       sortByRating: 6,
+      sortByPrice: "LowToHigh",
       categories: [
           {
             name: "Fiction",

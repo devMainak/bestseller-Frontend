@@ -5,7 +5,7 @@ import { Provider } from 'react-redux'
 import store from './app/store'
 import 'bootstrap/dist/js/bootstrap.min.js'
 import App from './App'
-import BookList from './features/books/BookList'
+import BookView from './features/books/BookView'
 
 // routes and elements for the router
 const router = createBrowserRouter([
@@ -15,7 +15,7 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/books/:bookCategory",
-		element: <BookList/>
+		element: <BookView/>
 	}
 ])
 
