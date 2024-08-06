@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import Header from "../../components/Header"
 import BookList from './BookList'
-import { fetchBooks, addToCategoryFilter, removeFromCategoryFilter, setPriceSlider, setSortByRating, clearFilters } from "./booksSlice"
+import { fetchBooks, addToCategoryFilter, removeFromCategoryFilter, setPriceSlider, setSortByRating, setSortByPrice ,clearFilters } from "./booksSlice"
 import { useParams } from "react-router-dom"
 
 const BookView = () => {
@@ -20,7 +20,7 @@ const BookView = () => {
   }, [])
 
   // Destructuring the booksSlice and accessing the store with useSelector
-  const { books, categoryFilter, priceSlider, categories, sortByRating } = useSelector(state => state.books)
+  const { books, categoryFilter, priceSlider, categories, sortByRating, sortByPrice } = useSelector(state => state.books)
 
   // Function to set the priceSlider value upon change
   const handlePriceSlider = (event) => {
@@ -44,13 +44,17 @@ dispatch(setSortByRating(parseInt(e.target.value)))
     console.log(sortByRating)
   }
 
+  // Function to set the current price sort method
+  const handleSortByPrice = (e) => {
+    dispatch(setSortByPrice(e.target.value))
+  }
+
   // Function to clear and reset all filters
   const clearAllFilters = () => {
     dispatch(clearFilters())
     dispatch(addToCategoryFilter(bookCategory))
   }
 
-  // console.log(books)
 
   // Filtered books by category
   const filteredBooksByCategory = books.filter(book => categoryFilter.includes(book.categoryName))
@@ -61,8 +65,9 @@ dispatch(setSortByRating(parseInt(e.target.value)))
   // Sorted books by rating
   const sortedBooksByRating = sortedBooksByPriceSlider.filter(book => book.rating >= sortByRating)
 
-  console.log(sortedBooksByRating)
-
+  // Sorted book by price
+  const sortedBooksByPrice = sortByPrice === "HighToLow" ? sortedBooksByRating.sort((a, b) => b.price - a.price ) : sortedBooksByRating.sort((a, b) => a.price - b.price)
+  
   return (
     <>
       <Header/>
@@ -105,15 +110,15 @@ dispatch(setSortByRating(parseInt(e.target.value)))
               <br/>
               <label  className="pt-2"><input type="radio" name="rating" value={6} onChange={handleRatingFilter} checked={sortByRating === 6 ? true : false} /> 6 & above</label>
             </section>
-            {/* <section className="pb-4">
+            <section className="pb-4">
               <label className="fs-5 fw-normal pb-2">Sort by</label>
               <br/>
-              <label className="pt-2"><input type="radio" name="sortBy" /> Price - Low to High</label>
+              <label className="pt-2"><input type="radio" name="sortBy" value="LowToHigh" onChange={handleSortByPrice} /> Price - Low to High</label>
               <br/>
-              <label className="pt-2"><input type="radio" name="sortBy" /> Price - High to Low</label>
-            </section> */}
+              <label className="pt-2"><input type="radio" name="sortBy" value="HighToLow" onChange={handleSortByPrice} checked={sortByPrice === "HighToLow" ? true : false}/> Price - High to Low</label>
+            </section>
           </div>
-          <BookList books={sortedBooksByRating} />
+          <BookList books={sortedBooksByPrice} />
         </div>
 
       </main>

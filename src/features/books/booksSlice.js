@@ -19,7 +19,7 @@
       categoryFilter: [],
       priceSlider: 100,
       sortByRating: 6,
-      sortByPrice: "LowToHigh",
+      sortByPrice: "HighToLow",
       categories: [
           {
             name: "Fiction",
@@ -74,11 +74,16 @@
       setSortByRating: (state, action) => {
         state.sortByRating = action.payload
       },
+      // Setting the sort by method
+      setSortByPrice: (state, action) => {
+        state.sortByPrice = action.payload
+      },
       // clear all filters and reset
       clearFilters: (state) => {
         state.categoryFilter = []
         state.priceSlider = 100
         state.sortByRating = 6
+        state.sortByPrice = "HighToLow"
         state.categories = state.categories.map(category => {
           category.checked = false
           return category
@@ -106,7 +111,7 @@
   })
 
   // exporting the action creators
-  export const { addToCategoryFilter, removeFromCategoryFilter, setPriceSlider, setSortByRating, clearFilters} = booksSlice.actions
+  export const { addToCategoryFilter, removeFromCategoryFilter, setPriceSlider, setSortByRating, setSortByPrice, clearFilters} = booksSlice.actions
 
   // exporting the reducer for the store
   export default booksSlice.reducer
