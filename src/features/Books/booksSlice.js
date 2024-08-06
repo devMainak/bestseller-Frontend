@@ -68,6 +68,9 @@ export const booksSlice = createSlice({
     // Setting the priceSlider value
     setPriceSlider: (state, action) => {
       state.priceSlider = action.payload
+    },
+    setSortByRating: (state, action) => {
+      state.sortByRating = action.value
     }
   },
   extraReducers: (builder) => {

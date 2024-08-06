@@ -1,27 +1,19 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import Header from "../components/Header"
-import { fetchBooks, addToCategoryFilter, removeFromCategoryFilter, setPriceSlider } from "./booksSlice"
+import { fetchBooks, addToCategoryFilter, removeFromCategoryFilter, setPriceSlider, setSortByRating } from "./booksSlice"
 import { useParams } from "react-router-dom"
 
 const BookList = () => {
   // makig use of the useDispatch hook
   const dispatch = useDispatch()
 
-  // Fetching books on page load using useEffect
-  useEffect(() => {
-    dispatch(fetchBooks())
-  }, [])
-
   // extracting book category using useParams
   const { bookCategory } = useParams()
   
-  // State variable for the current state of books 
-  const [booksToShow, setBooksToShow] = useState([])
-  const [selectedRating, setSelectedRating] = useState(6)
-
-  // setting bookCategory on page load && booksToShow with primary category
+  // Fetching books on page load && setting bookCategory on page load && booksToShow with primary category using useEffect
   useEffect(() => {
+    dispatch(fetchBooks())
     dispatch(addToCategoryFilter(bookCategory))
   }, [])
   
@@ -33,36 +25,30 @@ const BookList = () => {
     dispatch(setPriceSlider(event.target.value))
   }
 
-  // Filtered books by category
-  const filteredBooksByCategory = categoryFilter.length > 0 ? books.filter(book => categoryFilter.includes(book.categoryName))
-
-  // sorted books by priceSlider value
-    const sortedBooksByCategory = filteredBooksByCategory.filter(book => book.price > priceSlider)
-
   // Function to handle categories and categoryFilters
   const handleCategoryFilter = (e) => {
     const { value, checked } = e.target
-    // console.log(checked)
-    
     if (checked) {
       dispatch(addToCategoryFilter(value))
     } else {
       dispatch(removeFromCategoryFilter(value))
     }
-    
-      // console.log(categoryFilter)
-      // console.log(booksToShow)
   }
 
+  // Function to set the current rating filter
   const handleRatingFilter = (e) => {
-    const { value } = e.target
-
-    const filteredBooks = data.data.books.filter((book) => categoryFilter.includes(book.categoryName) && book.price > priceSlider)
-      setSelectedRating(value)
-      setBooksToShow(filteredBooks.filter(book => book.rating > value))
-
-    
+    dispatch(setSortByRating(parseFloat(e.target.value)))
   }
+
+  // Filtered books by category
+  const filteredBooksByCategory = categoryFilter.length > 0 ? books.filter(book => categoryFilter.includes(book.categoryName))
+
+  // Sorted books by priceSlider value
+    const sortedBooksByCategory = filteredBooksByCategory.filter(book => book.price > priceSlider)
+
+  // Sorted books by rating
+  const sortedBooksByRating = sortedBooksByCategory.filter(book => book.rating >= sortByRating)
+  
 
   const clearFilters = () => {
     setPriceSlider(100)
