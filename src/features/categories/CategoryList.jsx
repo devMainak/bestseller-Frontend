@@ -1,17 +1,9 @@
-import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { fetchCategories } from './categoriesSlice'
 
-const CategoryList = () => {
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    dispatch(fetchCategories())
-  }, [])
-
-  const { categories, status, error } = useSelector(state => state.categories)
-  
+const CategoryList = ({categories}) => {
+  // Destructuring categories slice from global state 
+  const { status, error } = useSelector(state => state.categories)
   
   return (
     <div>

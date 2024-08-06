@@ -1,8 +1,18 @@
-import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import CategoryList from '../features/categories/CategoryList'
+import { useEffect } from 'react'
+import { fetchCategories } from '../features/categories/categoriesSlice'
 
 const Home = () => {
+  // configuring useDispatch for usage
+  const dispatch = useDispatch()
 
+  useEffect(() => {
+    dispatch(fetchCategories())
+  }, [])
+
+  const { categories } = useSelector(state => state.categories)
+  
   return (
     <div>
        <section className="pt-4 pb-4">
@@ -15,7 +25,7 @@ const Home = () => {
          </div>
            </div>
            </section>
-          <CategoryList/>
+          <CategoryList categories={categories} />
     </div>
   )
 }
