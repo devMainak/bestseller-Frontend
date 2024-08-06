@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import Header from "../components/Header"
+import Header from "../../components/Header"
 import { fetchBooks, addToCategoryFilter, removeFromCategoryFilter, setPriceSlider, setSortByRating, clearFilters } from "./booksSlice"
 import { useParams } from "react-router-dom"
 
@@ -14,6 +14,7 @@ const BookList = () => {
   // Fetching books on page load && setting bookCategory on page load && booksToShow with primary category using useEffect
   useEffect(() => {
     dispatch(fetchBooks())
+    dispatch(clearFilters())
     dispatch(addToCategoryFilter(bookCategory))
   }, [])
   
@@ -38,7 +39,8 @@ const BookList = () => {
 
   // Function to set the current rating filter
   const handleRatingFilter = (e) => {
-dispatch(setSortByRating(parseFloat(e.target.value)))
+dispatch(setSortByRating(parseInt(e.target.value)))
+    console.log(sortByRating)
   }
 
   // Function to clear and reset all filters
@@ -47,14 +49,16 @@ dispatch(setSortByRating(parseFloat(e.target.value)))
     dispatch(addToCategoryFilter(bookCategory))
   }
 
+  // console.log(books)
+
   // Filtered books by category
-  const filteredBooksByCategory = categoryFilter.length > 0 ? books.filter(book => categoryFilter.includes(book.categoryName))
+  const filteredBooksByCategory = books.filter(book => categoryFilter.includes(book.categoryName))
 
   // Sorted books by priceSlider value
-    const sortedBooksByCategory = filteredBooksByCategory.filter(book => book.price > priceSlider)
+    const sortedBooksByPriceSlider = filteredBooksByCategory.filter(book => book.price > priceSlider)
 
   // Sorted books by rating
-  const sortedBooksByRating = sortedBooksByCategory.filter(book => book.rating >= sortByRating)
+  const sortedBooksByRating = sortedBooksByPriceSlider.filter(book => book.rating >= sortByRating)
 
   
   return (
@@ -80,8 +84,8 @@ dispatch(setSortByRating(parseFloat(e.target.value)))
               <label className="fs-5 fw-normal pb-2">Category</label>
               <br/>
           {categories.map((category) => (         
-      <div>
-      <label key={category.name} className="pt-2">
+      <div key={category.name}>
+      <label className="pt-2">
                   <input type="checkbox" value={category.name} checked={category.checked} onChange={handleCategoryFilter} /> {category.name}
                 </label>
                 <br/>
@@ -112,7 +116,7 @@ dispatch(setSortByRating(parseFloat(e.target.value)))
               <div className="row">
                 {sortedBooksByRating.map(book => {
                 return (
-                  <div className="col-sm-6">
+                  <div className="col-sm-6" key={book._id}>
                     <div className="card mb-3" style={{maxWidth: "540px"}}>
                       <div className="row g-0">
                         <div className="col-md-4">
