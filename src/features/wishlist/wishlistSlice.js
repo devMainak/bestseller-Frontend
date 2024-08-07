@@ -56,7 +56,10 @@ export const wishlistSlice = createSlice({
     })
     // Fulfilled case for addBookToWishListAsync
     builder.addCase(addBookToWishlistAsync.fulfilled, (state, action) => {
+      if (state.wishlist.some(book => book._id === action.payload._id))
+      {
       state.wishlist.push(action.payload.savedBook);
+      }
     })
     // Fulfilled case for deleteBookFromWishlistAsync
   builder.addCase(deleteBookFromWishlistAsync.fulfilled, (state, action) => {

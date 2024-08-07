@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom';
 
 // Import images if they are in the src directory
-import wishlistIcon from '../../public/wishlist.svg';  // Adjust the path as needed
-import cartIcon from '../../public/red-cart.svg';      // Adjust the path as needed
+import wishlistIcon from '../../public/wishlist.svg';  
+// Adjust the path as needed
+import cartIcon from '../../public/red-cart.svg';      
+// Adjust the path as needed
 
 const Header = () => {
   return (
