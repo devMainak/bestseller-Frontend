@@ -1,8 +1,12 @@
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+
+// Import images if they are in the src directory
+import wishlistIcon from '../../public/wishlist.svg';  // Adjust the path as needed
+import cartIcon from '../../public/red-cart.svg';      // Adjust the path as needed
 
 const Header = () => {
   return (
-    <nav className="navbar navbar-expand-lg bg-danger-subtle sticky-top" >
+    <nav className="navbar navbar-expand-lg bg-danger-subtle sticky-top">
       <div className="container container-fluid d-flex justify-content-between">
         <div>
           <Link className="navbar-brand text-danger fs-4 fw-semibold" to="/">
@@ -23,15 +27,14 @@ const Header = () => {
           </form>
         </div>
         <div>
-          <Link className="btn btn-danger" to="/">
+          <Link className="btn btn-danger" to="/login">
             Login
           </Link>
-          <Link>
-            <img src='../public/wishlist.svg' alt='Cart' className='img-fluid px-3' style={{height: '26px'}}/>
+          <Link to="/wishlist">
+            <img src={wishlistIcon} alt='Wishlist' className='img-fluid px-3' style={{ height: '26px' }} />
           </Link>
-          <Link>
-            <img src='../public/red-cart.svg' alt='Cart' className='img-fluid px-2' style={{height: '26px'}}/>
-            
+          <Link to="/cart">
+            <img src={cartIcon} alt='Cart' className='img-fluid px-2' style={{ height: '26px' }} />
           </Link>
         </div>
       </div>

@@ -118,7 +118,9 @@ dispatch(setSortByRating(parseInt(e.target.value)))
               <label className="pt-2"><input type="radio" name="sortBy" value="HighToLow" onChange={handleSortByPrice} checked={sortByPrice === "HighToLow" ? true : false}/> Price - High to Low</label>
             </section>
           </div>
-          <BookList books={sortedBooksByPrice} />
+          <div style={{ marginLeft: '3in', padding: '1rem' }}>
+            <BookList books={sortedBooksByPrice} />
+          </div>
         </div>
         <Outlet/>
       </main>

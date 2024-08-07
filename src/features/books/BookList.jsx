@@ -3,27 +3,29 @@ import { Link } from "react-router-dom";
 
 const BookList = ({ books }) => {
   // accessing status and error from store.books for loading handling
-  const { status, error } = useSelector(state => state.books)
-  
+  const { status, error } = useSelector(state => state.books);
+
   return (
-      <div className="py-4 container" style={{width: "75vw"}}>
-        {status === "loading" && <div className="spinner-border text-danger" role="status">
+    <div className="py-4 container" style={{ width: "100%" }}>
+      {status === "loading" && (
+        <div className="spinner-border text-danger" role="status">
           <span className="visually-hidden">Loading...</span>
-        </div>}
-        {error && <p className="fs-4 fw-normal">{error}</p>}
-        <div className="row">
-          {books.length > 0 && books.map((book) => {
-            return (
-              <div className="col-sm-6" key={book._id}>
-                <Link to={`/books/${book.categoryName}/${book._id}`} state={books} style={{textDecoration: "none"}}>
-                <div className="card mb-3 mx-4" style={{ minWidth: "640px", minHeight: "310px" }}>
+        </div>
+      )}
+      {error && <p className="fs-4 fw-normal">{error}</p>}
+      <div className="row">
+        {books.length > 0 && books.map((book) => {
+          return (
+            <div className="col-sm-6 col-lg-4 mb-3" key={book._id}>
+              <Link to={`/books/${book.categoryName}/${book._id}`} state={books} style={{ textDecoration: "none" }}>
+                <div className="card h-100">
                   <div className="row g-0">
                     <div className="col-md-4">
                       <img
                         src={book.coverImageUrl}
                         className="img-fluid rounded-start"
                         alt={book.title}
-                        style={{ minHeight: "310px" }}
+                        style={{ height: "100%" }}
                       />
                     </div>
                     <div className="col-md-8">
@@ -49,12 +51,13 @@ const BookList = ({ books }) => {
                     </div>
                   </div>
                 </div>
-                </Link>
-              </div>
-            );
-          })}
-        </div>
+              </Link>
+            </div>
+          );
+        })}
       </div>
+    </div>
   );
 };
+
 export default BookList;
