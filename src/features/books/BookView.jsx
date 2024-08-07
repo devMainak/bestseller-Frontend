@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 import Header from "../../components/Header"
 import BookList from './BookList'
 import { fetchBooks, addToCategoryFilter, removeFromCategoryFilter, setPriceSlider, setSortByRating, setSortByPrice ,clearFilters } from "./booksSlice"
-import { useParams } from "react-router-dom"
+import { useParams, Outlet } from "react-router-dom"
 
 const BookView = () => {
   // makig use of the useDispatch hook
@@ -120,7 +120,7 @@ dispatch(setSortByRating(parseInt(e.target.value)))
           </div>
           <BookList books={sortedBooksByPrice} />
         </div>
-
+        <Outlet/>
       </main>
     </>
   )

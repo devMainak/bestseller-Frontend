@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const BookList = ({ books }) => {
   // accessing status and error from store.books for loading handling
@@ -7,19 +8,20 @@ const BookList = ({ books }) => {
   return (
       <div className="py-4 container" style={{width: "75vw"}}>
         {status === "loading" && <div className="spinner-border text-danger" role="status">
-          <span classname="visually-hidden">Loading...</span>
+          <span className="visually-hidden">Loading...</span>
         </div>}
         {error && <p className="fs-4 fw-normal">{error}</p>}
         <div className="row">
           {books.length > 0 && books.map((book) => {
             return (
               <div className="col-sm-6" key={book._id}>
-                <div className="card mb-3 mx-4" style={{ minxWidth: "640px", minHeight: "310px" }}>
+                <Link to={`/books/${book.categoryName}/${book._id}`} state={books} style={{textDecoration: "none"}}>
+                <div className="card mb-3 mx-4" style={{ minWidth: "640px", minHeight: "310px" }}>
                   <div className="row g-0">
                     <div className="col-md-4">
                       <img
                         src={book.coverImageUrl}
-                        class="img-fluid rounded-start"
+                        className="img-fluid rounded-start"
                         alt={book.title}
                         style={{ minHeight: "310px" }}
                       />
@@ -29,15 +31,15 @@ const BookList = ({ books }) => {
                         <h5 className="card-title">{book.title}</h5>
                         <p className="card-text">by {book.author}</p>
                         <p className="card-text btn btn-danger">
-                          ⭐ {book.rating}
+                          ⭐ {book.rating.toFixed(1)}
                         </p>
                         <p className="fs-5 fw-normal">₹{book.price}</p>
-                        <div class="d-grid gap-2">
-                          <button class="btn btn-danger" type="button">
+                        <div className="d-grid gap-2">
+                          <button className="btn btn-danger" type="button">
                             Add to Cart
                           </button>
                           <button
-                            class="btn btn-light text-danger bg-danger-subtle"
+                            className="btn btn-light text-danger bg-danger-subtle"
                             type="button"
                           >
                             Add to Wishlist
@@ -47,6 +49,7 @@ const BookList = ({ books }) => {
                     </div>
                   </div>
                 </div>
+                </Link>
               </div>
             );
           })}
