@@ -60,7 +60,7 @@ export const wishlistSlice = createSlice({
     })
     // Fulfilled case for deleteBookFromWishlistAsync
   builder.addCase(deleteBookFromWishlistAsync.fulfilled, (state, action) => {
-      state.wishlist = state.wishlist.filter(book => book._id === action.payload._id)
+      state.wishlist = state.wishlist.filter(book => book._id !== action.payload.deletedBook._id)
     })
   },
 });

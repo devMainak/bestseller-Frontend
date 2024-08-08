@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchWishlist } from './wishlistSlice'
+import { fetchWishlist, deleteBookFromWishlistAsync } from './wishlistSlice'
 import Header from "../../components/Header"
 import { Link } from 'react-router-dom'
 import { fetchBooks } from '../books/booksSlice'
@@ -19,6 +19,19 @@ const Wishlist = () => {
   const { wishlist, status, error } = useSelector(state => state.wishlist)
   // Destructuring the books
   const { books } = useSelector(state => state.books)
+
+  // Async function to delete book from wishlist on click of btn
+  const handleDeleteFromWishlist = async (bookId) => {
+    try {
+      const resultAction = await dispatch(deleteBookFromWishlistAsync(bookId))
+      if (deleteBookFromWishlistAsync.fulfilled.match(resultAction))
+      {
+         console.log("Deleted book successfully.") 
+      }
+    } catch(error) {
+      console.error(error)
+    }
+  }
   
   return (
     <>
@@ -59,7 +72,7 @@ const Wishlist = () => {
                       </button>
                       <button
                         className="btn btn-light text-danger bg-danger-subtle"
-                        type="button"
+                        type="button" onClick={() => handleDeleteFromWishlist(book._id)}
                       >
                         Remove from Wishlist
                       </button>

@@ -2,13 +2,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import CategoryList from '../features/categories/CategoryList'
 import { useEffect } from 'react'
 import { fetchCategories } from '../features/categories/categoriesSlice'
+import { fetchWishlist } from '../features/wishlist/wishlistSlice'
 
 const Home = () => {
   // configuring useDispatch for usage
   const dispatch = useDispatch()
 
+  // Fetching categories and wishlist for population
   useEffect(() => {
     dispatch(fetchCategories())
+    dispatch(fetchWishlist())
   }, [])
 
   const { categories } = useSelector(state => state.categories)
