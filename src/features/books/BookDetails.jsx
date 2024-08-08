@@ -2,10 +2,14 @@ import { useLocation, useParams } from 'react-router-dom'
 import Header from '../../components/Header'
 
 const BookDetails = () => {
+  // Configuring location for usage
   const location = useLocation()
-  const books = location.state
+  // Extracting books from state
+  const  books  = location.state
+  // Extracting bookId using useParams()
   const { bookId } = useParams()
 
+  // Finding the book from books state array
   const book = books.find(book => book._id === bookId)
   
   return (

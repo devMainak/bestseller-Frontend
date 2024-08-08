@@ -1,32 +1,90 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { addBookToWishlistAsync } from "../wishlist/wishlistSlice";
+import { useState } from "react";
 
 const BookList = ({ books }) => {
-  // accessing status and error from store.books for loading handling
-  const { status, error } = useSelector(state => state.books);
+  // State variable for alert
+  const [alert, setAlert] = useState("");
+  // Configuring useDispatch for usage
+  const dispatch = useDispatch();
+  // Accessing status and error from store.books for loading handling
+  const { status, error } = useSelector((state) => state.books);
+  // Accessing wishlist to validate addition and deletion
+  const { wishlist } = useSelector((state) => state.wishlist);
+
+
+  // Async function to handle addition and validation to Wishlist
+  const handleAddToWishlist = async (bookToSave) => {
+    if (wishlist.some((book) => book.title === bookToSave.title)) {
+      setAlert("Book is already in Wishlist");
+      setTimeout(() => {
+        setAlert("");
+      }, 2000);
+    } else {
+      try {
+        const resultAction = await dispatch(addBookToWishlistAsync(bookToSave));
+        if (addBookToWishlistAsync.fulfilled.match(resultAction)) {
+          setAlert("Book successfully added to Wishlist");
+        }
+        setTimeout(() => {
+          setAlert("");
+        }, 2000);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
 
   return (
-    <div className="py-4 container" style={{ width: "100%" }}>
+    <div className="my-4 container" style={{ width: "100%" }}>
       {status === "loading" && (
         <div className="spinner-border text-danger" role="status">
           <span className="visually-hidden">Loading...</span>
         </div>
       )}
       {error && <p className="fs-4 fw-normal">{error}</p>}
+      {alert && (
+        <div className="row">
+          <div
+            className="alert alert-success d-flex align-items-center"
+            role="alert"
+            style={{ height: "3rem" }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"
+              viewBox="0 0 16 16"
+              role="img"
+              aria-label="Warning:"
+              style={{ height: "2rem" }}
+            >
+              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+            </svg>
+            <div>{alert}</div>
+          </div>
+        </div>
+      )}
       <div className="row">
-        {books.length > 0 && books.map((book) => {
-          return (
-            <div className="col-sm-6 col-lg-4 mb-3" key={book._id}>
-              <Link to={`/books/${book.categoryName}/${book._id}`} state={books} style={{ textDecoration: "none" }}>
+        {books.length > 0 &&
+          books.map((book) => {
+            return (
+              <div className="col-sm-6 mb-3" key={book._id}>
                 <div className="card h-100">
                   <div className="row g-0">
                     <div className="col-md-4">
-                      <img
-                        src={book.coverImageUrl}
-                        className="img-fluid rounded-start"
-                        alt={book.title}
-                        style={{ height: "100%" }}
-                      />
+                      <Link
+                        to={`/books/${book.categoryName}/${book._id}`}
+                        state={books}
+                        style={{ textDecoration: "none" }}
+                      >
+                        <img
+                          src={book.coverImageUrl}
+                          className="img-fluid rounded-start"
+                          alt={book.title}
+                          style={{ height: "100%" }}
+                        />
+                      </Link>
                     </div>
                     <div className="col-md-8">
                       <div className="card-body">
@@ -43,6 +101,7 @@ const BookList = ({ books }) => {
                           <button
                             className="btn btn-light text-danger bg-danger-subtle"
                             type="button"
+                            onClick={() => handleAddToWishlist(book)}
                           >
                             Add to Wishlist
                           </button>
@@ -51,10 +110,9 @@ const BookList = ({ books }) => {
                     </div>
                   </div>
                 </div>
-              </Link>
-            </div>
-          );
-        })}
+              </div>
+            );
+          })}
       </div>
     </div>
   );

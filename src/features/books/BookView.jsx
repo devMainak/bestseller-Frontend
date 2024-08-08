@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import Header from "../../components/Header"
 import BookList from './BookList'
 import { fetchBooks, addToCategoryFilter, removeFromCategoryFilter, setPriceSlider, setSortByRating, setSortByPrice ,clearFilters } from "./booksSlice"
 import { useParams, Outlet } from "react-router-dom"
+import { fetchWishlist } from "../wishlist/wishlistSlice"
 
 const BookView = () => {
   // makig use of the useDispatch hook
@@ -12,9 +13,10 @@ const BookView = () => {
   // extracting book category using useParams
   const { bookCategory } = useParams()
 
-  // Fetching books on page load && setting bookCategory on page load && booksToShow with primary category using useEffect
+  // Fetching books on page load && setting bookCategory on page load && Wishlist for validation
   useEffect(() => {
     dispatch(fetchBooks())
+    dispatch(fetchWishlist())
     dispatch(clearFilters())
     dispatch(addToCategoryFilter(bookCategory))
   }, [])
