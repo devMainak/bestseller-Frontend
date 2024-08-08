@@ -1,7 +1,16 @@
+import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useParams } from "react-router-dom";
+import { addBookToWishlistAsync } from '../wishlist/wishlistSlice'
 import Header from "../../components/Header";
+import { useState } from 'react';
 
 const BookDetails = () => {
+  // Configuring dispatch for usage
+  const dispatch = useDispatch()
+  // Alert state variable
+  const [alert, setAlert] = useState('')
+  // Extracting wishlist for validation
+  const { wishlist } = useSelector(state => state.wishlist)
   // Configuring location for usage
   const location = useLocation();
   // Extracting books from state
@@ -12,11 +21,33 @@ const BookDetails = () => {
   // Finding the book from books state array
   const book = books.find((book) => book._id === bookId);
 
+  // Async function to handle addition and validation to Wishlist
+  const handleAddToWishlist = async (bookToSave) => {
+    if (wishlist.some((book) => book.title === bookToSave.title)) {
+      setAlert("Book is already in Wishlist");
+      setTimeout(() => {
+        setAlert("");
+      }, 2000);
+    } else {
+      try {
+        const resultAction = await dispatch(addBookToWishlistAsync(bookToSave));
+        if (addBookToWishlistAsync.fulfilled.match(resultAction)) {
+          setAlert("Book successfully added to Wishlist");
+        }
+        setTimeout(() => {
+          setAlert("");
+        }, 2000);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+  
   return (
     <>
       <Header />
       <main className="container">
-        <div className="d-flex justify-content-between pt-5">
+        <div className="d-flex justify-content-between py-5">
           <div>
             <img
               src={`${book.coverImageUrl}`}
@@ -62,11 +93,32 @@ const BookDetails = () => {
               </button>
               <button
                 className="btn btn-light text-danger bg-danger-subtle"
-                type="button"
+                type="button" onClick={() => handleAddToWishlist(book)}
               >
                 Add to Wishlist
               </button>
             </div>
+              {alert && (
+                <div className="row mt-3">
+                  <div
+                    className="alert alert-success d-flex align-items-center"
+                    role="alert"
+                    style={{ height: "3rem" }}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"
+                      viewBox="0 0 16 16"
+                      role="img"
+                      aria-label="Warning:"
+                      style={{ height: "2rem" }}
+                    >
+                      <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                    </svg>
+                    <div>{alert}</div>
+                  </div>
+                </div>
+              )}
           </div>
         </div>
       </main>
