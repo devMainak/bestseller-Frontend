@@ -37,14 +37,14 @@ const Wishlist = () => {
     <>
       <Header/>
       <main className="container">
-        <h4 className="display-3 fw-semibold text-center">Your Wishlist <span className='text-danger'>({wishlist.length > 0 ? wishlist.length : 0})</span></h4>
+        <h4 className="display-3 fw-semibold text-center py-4">Your Wishlist <span className='text-danger'>({wishlist.length > 0 ? wishlist.length : 0})</span></h4>
         <section>
           {status === "loading" && <div className="spinner-border text-danger" role="status">
             <span className="visually-hidden">Loading...</span>
           </div>}
           {error && <p className='fs-4 text-center-danger'>{error}</p>}
           {wishlist.length > 0 && 
-            <ul className='list-group'>
+            <ul className='list-group pb-5'>
               {wishlist.map(book => {
                 const matchingBook = books.find(currBook => currBook.title === book.title);  
                 const bookId = matchingBook ? matchingBook._id : null
