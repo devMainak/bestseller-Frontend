@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { addBookToWishlistAsync } from "../wishlist/wishlistSlice";
 import { useState } from "react";
+import { addBookToCartAsync, updateBookInCartAsync } from "../cart/cartSlice";
 
 const BookList = ({ books }) => {
   // State variable for alert
@@ -12,6 +13,8 @@ const BookList = ({ books }) => {
   const { status, error } = useSelector((state) => state.books);
   // Accessing wishlist to validate addition and deletion
   const { wishlist } = useSelector((state) => state.wishlist);
+  // Accessing cart to validate addition and deletion
+  const { cart } = useSelector(state => state.cart)
 
 
   // Async function to handle addition and validation to Wishlist
@@ -26,15 +29,48 @@ const BookList = ({ books }) => {
         const resultAction = await dispatch(addBookToWishlistAsync(bookToSave));
         if (addBookToWishlistAsync.fulfilled.match(resultAction)) {
           setAlert("Book successfully added to Wishlist");
+          setTimeout(() => {
+            setAlert("");
+          }, 2000);
         }
-        setTimeout(() => {
-          setAlert("");
-        }, 2000);
       } catch (error) {
         console.error(error);
       }
     }
   };
+
+  // Async function to handle addition and validation to cart
+  const handleAddToCart = async (bookToSave) => {
+    const bookToUpdate = cart.find(book => book.title === bookToSave.title)
+    try {
+    if (bookToUpdate) {
+      const updatedQuantity = Number(bookToUpdate.quantity) + 1; // Ensure quantity is a number
+      const updatedBook = { ...bookToUpdate, quantity: updatedQuantity };
+      console.log("Updated Book:", updatedBook);
+
+      const resultAction = await dispatch(updateBookInCartAsync({bookId: updatedBook._id, book: updatedBook}));
+      console.log("Dispatch Result:", resultAction);
+      if (updateBookInCartAsync.fulfilled.match(resultAction))
+      {
+        setAlert("Book quantity updated successfully.")
+        setTimeout(() => {
+          setAlert("");
+        }, 2000);
+      }
+    } else {
+      const resultAction = await dispatch(addBookToCartAsync(bookToSave))
+      if (addBookToCartAsync.fulfilled.match(resultAction))
+      {
+        setAlert("Added to cart")
+        setTimeout(() => {
+          setAlert("");
+        }, 2000);
+      }
+    }
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   return (
     <div className="my-4 container" style={{ width: "100%" }}>
@@ -95,7 +131,7 @@ const BookList = ({ books }) => {
                         </p>
                         <p className="fs-5 fw-normal">₹{book.price}</p>
                         <div className="d-grid gap-2">
-                          <button className="btn btn-danger" type="button">
+                          <button className="btn btn-danger" type="button" onClick={() => handleAddToCart(book)}>
                             Add to Cart
                           </button>
                           <button

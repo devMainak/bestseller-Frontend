@@ -8,6 +8,7 @@ import App from './App'
 import BookView from './features/books/BookView'
 import BookDetails from './features/books/BookDetails'
 import Wishlist from './features/wishlist/Wishlist'
+import CartView from './features/cart/CartView'
 
 // routes and elements for the router
 const router = createBrowserRouter([
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
 	{
 		path: "/wishlist",
 		element: <Wishlist/>
+	},
+	{
+		path: "/cart",
+		element: <CartView/>
 	}
 ])
 

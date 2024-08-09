@@ -16,7 +16,7 @@ export const addBookToCartAsync = createAsyncThunk("add/cart", async (book) => {
 })
 
 // Async function to update book in cart
-export const updateBookInCartAsync = createAsyncThunk("update/cart", async (bookId, book) => {
+export const updateBookInCartAsync = createAsyncThunk("update/cart", async ({bookId, book}) => {
   const response = await axios.put(`https://9dbaed3b-94c5-4327-8a1b-6921422f3eba-00-32qwd9xgzzr57.pike.replit.dev/cart/${bookId}`, book)
 
   return response.data
@@ -55,7 +55,7 @@ export const cartSlice = createSlice({
     })
     // Case for fulfilled case of addBookToCartAsync
     builder.addCase(addBookToCartAsync.fulfilled, (state, action) => {
-      state.cart.push(action.payload.updatedBook)
+      state.cart.push(action.payload.savedBook)
     })
     // Case for fulfilled case of updateBookInCartAsync
     builder.addCase(updateBookInCartAsync.fulfilled, (state, action) => {

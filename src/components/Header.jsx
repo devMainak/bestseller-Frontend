@@ -7,8 +7,6 @@ import cartIcon from '../../public/red-cart.svg';
 // Adjust the path as needed
 
 const Header = () => {
-
-  const { wishlist } = useSelector(state => state.wishlist)
   
   return (
     <nav className="navbar navbar-expand-lg bg-danger-subtle sticky-top">

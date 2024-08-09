@@ -5,6 +5,7 @@ import BookList from './BookList'
 import { fetchBooks, addToCategoryFilter, removeFromCategoryFilter, setPriceSlider, setSortByRating, setSortByPrice ,clearFilters } from "./booksSlice"
 import { useParams, Outlet } from "react-router-dom"
 import { fetchWishlist } from "../wishlist/wishlistSlice"
+import { fetchCart } from "../cart/cartSlice"
 
 const BookView = () => {
   // makig use of the useDispatch hook
@@ -17,6 +18,7 @@ const BookView = () => {
   useEffect(() => {
     dispatch(fetchBooks())
     dispatch(fetchWishlist())
+    dispatch(fetchCart())
     dispatch(clearFilters())
     dispatch(addToCategoryFilter(bookCategory))
   }, [])
