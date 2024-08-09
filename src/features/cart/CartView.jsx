@@ -21,11 +21,15 @@ const CartView = () => {
   const { wishlist } = useSelector(state => state.wishlist)
   const { books } = useSelector(state => state.books)
 
+  
+  
   // Calculating total items in cart
   const totalItems = cart.reduce((acc, curr) => {
     acc = acc + curr.quantity 
     return acc
   }, 0)
+
+  
   
   return (
     <>

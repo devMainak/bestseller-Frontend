@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useParams } from "react-router-dom";
 import { addBookToWishlistAsync } from '../wishlist/wishlistSlice'
+import { addBookToCartAsync, updateBookInCartAsync } from "../cart/cartSlice"
 import Header from "../../components/Header";
 import { useState } from 'react';
 
@@ -11,6 +12,7 @@ const BookDetails = () => {
   const [alert, setAlert] = useState('')
   // Extracting wishlist for validation
   const { wishlist } = useSelector(state => state.wishlist)
+  const { cart } = useSelector(state => state.cart)
   // Configuring location for usage
   const location = useLocation();
   // Extracting books from state
@@ -20,7 +22,8 @@ const BookDetails = () => {
 
   // Finding the book from books state array
   const book = books.find((book) => book._id === bookId);
-
+  console.log(cart)
+  console.log(wishlist)
   // Async function to handle addition and validation to Wishlist
   const handleAddToWishlist = async (bookToSave) => {
     if (wishlist.some((book) => book.title === bookToSave.title)) {
@@ -42,6 +45,40 @@ const BookDetails = () => {
       }
     }
   };
+
+  // Async function to handle addition and validation to cart
+  const handleAddToCart = async (bookToSave) => {
+    const bookToUpdate = cart.find(book => book.title === bookToSave.title)
+    try {
+    if (bookToUpdate) {
+      const updatedQuantity = Number(bookToUpdate.quantity) + 1; // Ensure quantity is a number
+      const updatedBook = { ...bookToUpdate, quantity: updatedQuantity };
+      console.log("Updated Book:", updatedBook);
+
+      const resultAction = await dispatch(updateBookInCartAsync({bookId: updatedBook._id, book: updatedBook}));
+      console.log("Dispatch Result:", resultAction);
+      if (updateBookInCartAsync.fulfilled.match(resultAction))
+      {
+        setAlert("Book quantity updated successfully.")
+        setTimeout(() => {
+          setAlert("");
+        }, 2000);
+      }
+    } else {
+      const resultAction = await dispatch(addBookToCartAsync(bookToSave))
+      console.log(resultAction)
+      if (addBookToCartAsync.fulfilled.match(resultAction))
+      {
+        setAlert("Added to cart")
+        setTimeout(() => {
+          setAlert("");
+        }, 2000);
+      }
+    }
+    } catch (error) {
+      console.error(error)
+    }
+  }
   
   return (
     <>
@@ -88,7 +125,7 @@ const BookDetails = () => {
             </p>
             <p className="card-text fs-4">Free Delivery</p>
             <div className="d-grid gap-2">
-              <button className="btn btn-danger" type="button">
+              <button className="btn btn-danger" type="button" onClick={() => handleAddToCart(book)}>
                 Add to Cart
               </button>
               <button
