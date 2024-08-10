@@ -46,13 +46,12 @@ const BookList = ({ books }) => {
     if (bookToUpdate) {
       const updatedQuantity = Number(bookToUpdate.quantity) + 1; // Ensure quantity is a number
       const updatedBook = { ...bookToUpdate, quantity: updatedQuantity };
-      console.log("Updated Book:", updatedBook);
 
       const resultAction = await dispatch(updateBookInCartAsync({bookId: updatedBook._id, book: updatedBook}));
-      console.log("Dispatch Result:", resultAction);
+     
       if (updateBookInCartAsync.fulfilled.match(resultAction))
       {
-        setAlert("Book quantity updated successfully.")
+        setAlert("Book quantity updated successfully in cart.")
         setTimeout(() => {
           setAlert("");
         }, 2000);

@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchWishlist, deleteBookFromWishlistAsync } from './wishlistSlice'
 import Header from "../../components/Header"
@@ -9,6 +9,9 @@ const Wishlist = () => {
   // configuring useDispatch for usage
   const dispatch = useDispatch()
 
+  // alert for iteractivity
+  const [alert, setAlert] = useState('')
+  
   // Fetching wishlist on page load
   useEffect(() => {
     dispatch(fetchWishlist())
@@ -26,7 +29,10 @@ const Wishlist = () => {
       const resultAction = await dispatch(deleteBookFromWishlistAsync(bookId))
       if (deleteBookFromWishlistAsync.fulfilled.match(resultAction))
       {
-         console.log("Deleted book successfully.") 
+         setAlert("Removed book from Wishlist.")
+        setTimeout(() => {
+          setAlert("")
+        }, 2000)
       }
     } catch(error) {
       console.error(error)
@@ -43,6 +49,27 @@ const Wishlist = () => {
             <span className="visually-hidden">Loading...</span>
           </div>}
           {error && <p className='fs-4 text-center-danger'>{error}</p>}
+          {alert && (
+            <div className="row">
+              <div
+                className="alert alert-success d-flex align-items-center"
+                role="alert"
+                style={{ height: "3rem" }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"
+                  viewBox="0 0 16 16"
+                  role="img"
+                  aria-label="Warning:"
+                  style={{ height: "2rem" }}
+                >
+                  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                </svg>
+                <div>{alert}</div>
+              </div>
+            </div>
+          )}
           {wishlist.length > 0 && 
             <ul className='list-group pb-5'>
               {wishlist.map(book => {
@@ -68,7 +95,7 @@ const Wishlist = () => {
                   <div>
                     <div className="d-grid gap-2">
                       <button className="btn btn-danger" type="button">
-                        Add to Cart
+                        Move to Cart
                       </button>
                       <button
                         className="btn btn-light text-danger bg-danger-subtle"
