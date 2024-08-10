@@ -94,8 +94,8 @@ const CartView = () => {
             <div className='card'>
               <div className='card-body'>
                 <p className='fs-4 fw-semibold'>PRICE DETAILS</p>
-                <div class="d-grid gap-2">
-                  <button class="btn btn-danger" type="button">Check Out</button>
+                <div className="d-grid gap-2">
+                  <button className="btn btn-danger" type="button">Check Out</button>
                 </div>
               </div>
             </div>

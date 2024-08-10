@@ -22,7 +22,7 @@ const BookDetails = () => {
 
   // Finding the book from books state array
   const book = books.find((book) => book._id === bookId);
-  console.log(cart)
+  
   console.log(wishlist)
   // Async function to handle addition and validation to Wishlist
   const handleAddToWishlist = async (bookToSave) => {

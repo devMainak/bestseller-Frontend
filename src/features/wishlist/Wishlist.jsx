@@ -4,6 +4,7 @@ import { fetchWishlist, deleteBookFromWishlistAsync } from './wishlistSlice'
 import Header from "../../components/Header"
 import { Link } from 'react-router-dom'
 import { fetchBooks } from '../books/booksSlice'
+import { fetchCart, addBookToCartAsync, updateBookInCartAsync } from '../cart/cartSlice'
 
 const Wishlist = () => {
   // configuring useDispatch for usage
@@ -16,12 +17,15 @@ const Wishlist = () => {
   useEffect(() => {
     dispatch(fetchWishlist())
     dispatch(fetchBooks())
+    dispatch(fetchCart())
   }, [])
 
   // Destructuring the wishlistSlice
   const { wishlist, status, error } = useSelector(state => state.wishlist)
   // Destructuring the books
   const { books } = useSelector(state => state.books)
+  // Destructuring the cart for addition and validation
+  const { cart } = useSelector(state => state.cart)
 
   // Async function to delete book from wishlist on click of btn
   const handleDeleteFromWishlist = async (bookId) => {
@@ -35,6 +39,38 @@ const Wishlist = () => {
         }, 2000)
       }
     } catch(error) {
+      console.error(error)
+    }
+  }
+ 
+  // Async function to move book from wishlist to cart
+  const handleMoveToCart = async (bookToSave) => {
+    const bookToUpdate = cart.find(book => book.title === bookToSave.title)
+    try {
+    if (bookToUpdate) {
+      const updatedQuantity = Number(bookToUpdate.quantity) + 1; // Ensure quantity is a number
+      const updatedBook = { ...bookToUpdate, quantity: updatedQuantity };
+
+      const resultAction = await dispatch(updateBookInCartAsync({bookId: updatedBook._id, book: updatedBook}));
+
+      if (updateBookInCartAsync.fulfilled.match(resultAction))
+      {
+        setAlert("Book quantity updated successfully in cart.")
+        setTimeout(() => {
+          setAlert("");
+        }, 2000);
+      }
+    } else {
+      const resultAction = await dispatch(addBookToCartAsync(bookToSave))
+      if (addBookToCartAsync.fulfilled.match(resultAction))
+      {
+        setAlert("Added to cart")
+        setTimeout(() => {
+          setAlert("");
+        }, 2000);
+      }
+    }
+    } catch (error) {
       console.error(error)
     }
   }
@@ -94,7 +130,7 @@ const Wishlist = () => {
                   </div>   
                   <div>
                     <div className="d-grid gap-2">
-                      <button className="btn btn-danger" type="button">
+                      <button className="btn btn-danger" type="button" onClick={() => handleMoveToCart(book)}>
                         Move to Cart
                       </button>
                       <button
