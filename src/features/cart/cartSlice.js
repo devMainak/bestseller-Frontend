@@ -24,7 +24,7 @@ export const updateBookInCartAsync = createAsyncThunk("update/cart", async ({boo
 
 // Async function to delete book from cart
 export const deleteBookFromCartAsync = createAsyncThunk("delete/cart", async (bookId) => {
-  const response = await axios.post("https://9dbaed3b-94c5-4327-8a1b-6921422f3eba-00-32qwd9xgzzr57.pike.replit.dev/cart", bookId)
+  const response = await axios.delete(`https://9dbaed3b-94c5-4327-8a1b-6921422f3eba-00-32qwd9xgzzr57.pike.replit.dev/cart/${bookId}`)
 
   return response.data
 })

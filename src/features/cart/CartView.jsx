@@ -1,14 +1,16 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { fetchCart } from './cartSlice'
+import { fetchCart, updateBookInCartAsync, deleteBookFromCartAsync } from './cartSlice'
 import Header from '../../components/Header'
-import { fetchWishlist } from '../wishlist/wishlistSlice'
+import { fetchWishlist, addBookToWishlistAsync } from '../wishlist/wishlistSlice'
 import { fetchBooks } from '../books/booksSlice'
 
 const CartView = () => {
   // Configuring useDispatch for usage
   const dispatch = useDispatch()
+  // alert for notification
+  const [alert, setAlert] = useState('')
   // Fetching cart on page load
   useEffect(() => {
     dispatch(fetchCart())
@@ -21,7 +23,77 @@ const CartView = () => {
   const { wishlist } = useSelector(state => state.wishlist)
   const { books } = useSelector(state => state.books)
 
-  
+  // Async function to add book to Wishlist from  cart
+  const handleAddToWishlist = async (bookToAdd) => {
+    if (wishlist.some(book => book.title === bookToAdd.title))
+    {
+      setAlert("Book is already in Wishlist.")
+      setTimeout(() => {
+        setAlert("")
+      }, 2000)
+    } else {
+      try {
+        const resultAction = await dispatch(addBookToWishlistAsync(bookToAdd))
+        if (addBookToWishlistAsync.fulfilled.match(resultAction))
+        {
+          setAlert("Add to Wishlist")
+          setTimeout(() => {
+            setAlert("")
+          }, 2000)
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+  }
+
+  // Function to update the book quantity in cart
+  const handleIncreaseBookQuantity = (book) => {
+    try {
+      const bookToUpdate = {...book, quantity: book.quantity + 1}
+      dispatch(updateBookInCartAsync({bookId: bookToUpdate._id, book: bookToUpdate}))
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  // Async Function to decrease book quantity or remove book in cart
+  const handleDecreaseBookQuantity = async (book) => {
+    if (book.quantity > 1)
+    {
+      const bookToUpdate = {...book, quantity: book.quantity - 1}
+      dispatch(updateBookInCartAsync({bookId: bookToUpdate._id, book: bookToUpdate}))
+    } else {
+      try {
+        const resultAction = await dispatch(deleteBookFromCartAsync(book._id))
+        if (deleteBookFromCartAsync.fulfilled.match(resultAction))
+        {
+          setAlert("Removed book from cart.")
+          setTimeout(() => {
+            setAlert("")
+          }, 2000)
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+  }
+
+  // Async function delete book from cart
+  const handleRemoveFromCart = async (bookId) => {
+    try {
+      const resultAction = await dispatch(deleteBookFromCartAsync(bookId))
+      if (deleteBookFromCartAsync.fulfilled.match(resultAction))
+      {
+        setAlert("Removed book from cart.")
+        setTimeout(() => {
+          setAlert("")
+        }, 2000)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
   
   // Calculating total items in cart
   const totalItems = cart.reduce((acc, curr) => {
@@ -29,7 +101,6 @@ const CartView = () => {
     return acc
   }, 0)
 
-  
   
   return (
     <>
@@ -40,7 +111,28 @@ const CartView = () => {
           <span className="visually-hidden">Loading...</span>
         </div></div>}
         {error && <p className='fs-4 text-center-danger'>{error}</p>}
-        { cart.length > 0 &&  <div className='row'>
+        {alert && (
+          <div className="row">
+            <div
+              className="alert alert-success d-flex align-items-center"
+              role="alert"
+              style={{ height: "3rem" }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"
+                viewBox="0 0 16 16"
+                role="img"
+                aria-label="Warning:"
+                style={{ height: "2rem" }}
+              >
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+              </svg>
+              <div>{alert}</div>
+            </div>
+          </div>
+        )}
+        { cart.length > 0 &&  <div className='row pb-5'>
           <div className='col-md-8'>
             <ul className='list-group'>
               {cart.map(book => {
@@ -68,17 +160,17 @@ const CartView = () => {
                       <div>
                         <div className='pb-5'>
                           <lable className='fs-4'>Quantity: </lable><br/>
-                          <button style={{borderRadius: "30px"}}>+</button>
+                          <button style={{borderRadius: "30px"}} onClick={() => handleIncreaseBookQuantity(book)}>+</button>
                           <span className='fs-4 px-2'>{book.quantity}</span>
-                          <button style={{borderRadius: "30px"}}> -</button>
+                          <button style={{borderRadius: "30px"}} onClick={() => handleDecreaseBookQuantity(book)}> - </button>
                         </div>
                         <div className="d-grid gap-2">
-                          <button className="btn btn-danger" type="button">
+                          <button className="btn btn-danger" type="button" onClick={() => handleAddToWishlist(book)}>
                             Add to Wislist
                           </button>
                           <button
                             className="btn btn-light text-danger bg-danger-subtle"
-                            type="button" onClick={() => handleDeleteFromWishlist(book._id)}
+                            type="button" onClick={() => handleRemoveFromCart(book._id)}
                           >
                             Remove from Cart
                           </button>
