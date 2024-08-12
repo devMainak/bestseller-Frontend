@@ -55,15 +55,15 @@ export const addressSlice = createSlice({
     })
     // Fulfilled case for addNewAddressAsync
     builder.addCase(addNewAddressAsync.fulfilled, (state, action) => {
-      state.addresses.push(action.payload.savedBook)
+      state.addresses.push(action.payload.savedAddress)
     })
     // Fulfilled case for updateAddressAsync
     builder.addCase(updateAddressAsync.fulfilled, (state, action) => {
-      state.addresses = state.addresses.map(address => address._id === action.payload.updatedBook._id ? action.payload.updatedBook : address)
+      state.addresses = state.addresses.map(address => address._id === action.payload.updatedAddress._id ? action.payload.updatedAddress : address)
     })
     // Fulfilled case for deleteAddressAsync
     builder.addCase(deleteAddressAsync.fulfilled, (state, action) => {
-      state.addresses = state.addresses.filter(address => address._id !== action.payload.deletedBook._id)
+      state.addresses = state.addresses.filter(address => address._id !== action.payload.deletedAddress._id)
     })
   }
 })

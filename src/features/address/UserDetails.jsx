@@ -42,10 +42,10 @@ const UserDetails = () => {
             {addresses.length > 0 && (
               <ul className='list-group w-50'>
                 {addresses.map(address => (
-                <li className='list-group-item'>
+                <li className='list-group-item' key={address._id}>
                   {address.houseNumber}, {address.street}, {address.city}, {address.state}, {address.country} - {address.postalCode} 
                   <span className='float-end'>
-                    <Link style={{textDecoration: "none", color: "red"}} to="/user/address" state={address}>Edit</Link>  |  <Link style={{textDecoration: "none", color: "red"}}>Delete</Link>
+                    <Link style={{textDecoration: "none", color: "red"}} to="/user/address" state={{address}}>Edit</Link>  |  <button className='btn' style={{textDecoration: "none", color: "red"}} onClick={() => dispatch(deleteAddressAsync(address._id))}>Delete</button>
                   </span>
                 </li>
                 ))}

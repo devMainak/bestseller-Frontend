@@ -36,6 +36,7 @@ const AddressForm = () => {
           }
         } else {
           const updatedAdderss = {houseNumber, street, city, state, country, postalCode: parseInt(postalCode)}
+          console.log(address._id)
           const resultAction = await dispatch(updateAddressAsync({addressId: address._id, address: updatedAdderss}))
           if (updateAddressAsync.fulfilled.match(resultAction))
           {
@@ -60,7 +61,7 @@ const AddressForm = () => {
     <>
       <Header/>
       <main className="container">
-        <h3 className="display-3 fw-semibold py-4">Add New Address</h3>
+        <h3 className="display-3 fw-semibold py-4">{address ? "Upate" : "Add New"} Address</h3>
           <form onSubmit={addressFormHandler}>
             <input onChange={(e) => setHouseNumber(e.target.value)} className="form-control mb-3" type="text" placeholder="House / Apartment No." value={houseNumber}/>
             <input onChange={(e) => setStreet(e.target.value)} className="form-control mb-3" type="text" placeholder="Street / Square / Block" value={street}/>
@@ -68,7 +69,7 @@ const AddressForm = () => {
             <input onChange={(e) => setState(e.target.value)} className="form-control mb-3" type="text" placeholder="State" value={state}/>
             <input onChange={(e) => setCountry(e.target.value)} className="form-control mb-3" type="text" placeholder="Country" value={country}/>
             <input onChange={(e) => setPostalCode(e.target.value)} className="form-control mb-3" type="number" placeholder="Postal Code" value={postalCode}/>
-            <button className="btn btn-danger" type='submit'>Add</button>
+            <button className="btn btn-danger" type='submit'>{address ? "Update" : "Add"}</button>
             <button className="btn btn btn-light text-danger bg-danger-subtle mx-3">Delete</button>
           </form>
           {alert && <p className='fs-4 py-4'>{alert}</p>}
