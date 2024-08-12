@@ -39,6 +39,9 @@ const Header = () => {
           <Link to="/cart">
             <img src={cartIcon} alt='Cart' className='img-fluid px-2' style={{ height: '26px' }} />
           </Link>
+          <Link to="/user">
+            <img src="https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg" alt='Cart' className='img-fluid px-2' style={{ height: '26px', borderRadius: "50%" }} />
+          </Link>
         </div>
       </div>
     </nav>

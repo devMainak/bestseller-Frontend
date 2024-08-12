@@ -1,4 +1,4 @@
-import { configureSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 
 // Async function to read all addresses
@@ -30,7 +30,7 @@ export const deleteAddressAsync = createAsyncThunk("delete/address", async (addr
 })
 
 // Configuring address slice
-export const addressSlice = configureSlice({
+export const addressSlice = createSlice({
   name: "address",
   initialState: {
     addresses: [],
