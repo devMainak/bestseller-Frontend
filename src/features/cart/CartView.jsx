@@ -36,7 +36,7 @@ const CartView = () => {
         const resultAction = await dispatch(addBookToWishlistAsync(bookToAdd))
         if (addBookToWishlistAsync.fulfilled.match(resultAction))
         {
-          setAlert("Add to Wishlist")
+          setAlert("Added to Wishlist")
           setTimeout(() => {
             setAlert("")
           }, 2000)

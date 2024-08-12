@@ -5,6 +5,7 @@ import { booksSlice } from "../features/books/booksSlice"
 import { categoriesSlice } from "../features/categories/categoriesSlice"
 import { wishlistSlice } from "../features/wishlist/wishlistSlice"
 import { cartSlice } from "../features/cart/cartSlice"
+import { addressSlice } from "../features/address/adressSlice"
 
 // Defining persist config
 const persistConfig = {
@@ -18,7 +19,8 @@ const rootReducer = combineReducers({
   books: booksSlice.reducer,
   categories: categoriesSlice.reducer,
   wishlist: wishlistSlice.reducer,
-  cart: cartSlice.reducer
+  cart: cartSlice.reducer,
+  address: addressSlice.reducer
 })
 
 // Creating persisted reducer
