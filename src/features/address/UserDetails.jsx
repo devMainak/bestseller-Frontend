@@ -31,7 +31,7 @@ const UserDetails = () => {
             </div>
           </div>
           <div className='py-4'>
-            <button className='btn btn-danger'>Add Address</button>
+            <Link className='btn btn-danger' to={`/user/address`}>Add Address</Link>
           </div>
           <div>
             <h5 className='display-5 fw-semibold'>Addresses</h5>
@@ -45,7 +45,7 @@ const UserDetails = () => {
                 <li className='list-group-item'>
                   {address.houseNumber}, {address.street}, {address.city}, {address.state}, {address.country} - {address.postalCode} 
                   <span className='float-end'>
-                    <Link style={{textDecoration: "none", color: "red"}}>Edit</Link>  |  <Link style={{textDecoration: "none", color: "red"}}>Delete</Link>
+                    <Link style={{textDecoration: "none", color: "red"}} to="/user/address" state={address}>Edit</Link>  |  <Link style={{textDecoration: "none", color: "red"}}>Delete</Link>
                   </span>
                 </li>
                 ))}

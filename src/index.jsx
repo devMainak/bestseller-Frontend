@@ -11,6 +11,7 @@ import BookDetails from './features/books/BookDetails'
 import Wishlist from './features/wishlist/Wishlist'
 import CartView from './features/cart/CartView'
 import UserDetails from './features/address/UserDetails'
+import AddressForm from './features/address/AddressForm'
 
 // routes and elements for the router
 const router = createBrowserRouter([
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
 	{
 		path: "/user",
 		element: <UserDetails/>
+	},
+	{
+		path: "/user/address",
+		element: <AddressForm/>
 	}
 ])
 
