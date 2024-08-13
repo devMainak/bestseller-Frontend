@@ -13,6 +13,11 @@ const UserDetails = () => {
   }, [])
   // Destructuring address slice
   const { addresses, status, error } = useSelector(state => state.address)
+
+  // Async function to delete address and validate deletion of address
+  const handleDeleteAddress = async (addressId) => {
+    dispatch(deleteAddressAsync(addressId))
+  }
   
   return (
     <>
@@ -39,18 +44,18 @@ const UserDetails = () => {
               <span className="visually-hidden">Loading...</span>
             </div>}
             {error && <p>{error}</p>}
-            {addresses.length > 0 && (
+            {addresses.length > 0 ? (
               <ul className='list-group w-50'>
                 {addresses.map(address => (
                 <li className='list-group-item' key={address._id}>
                   {address.houseNumber}, {address.street}, {address.city}, {address.state}, {address.country} - {address.postalCode} 
                   <span className='float-end'>
-                    <Link style={{textDecoration: "none", color: "red"}} to="/user/address" state={{address}}>Edit</Link>  |  <button className='btn' style={{textDecoration: "none", color: "red"}} onClick={() => dispatch(deleteAddressAsync(address._id))}>Delete</button>
+                    <Link style={{textDecoration: "none", color: "red"}} to="/user/address" state={{address}}>Edit</Link>  |  <Link style={{textDecoration: "none", color: "red"}} onClick={() => handleDeleteAddress(address._id)}>Delete</Link>
                   </span>
                 </li>
                 ))}
               </ul>
-            )}
+            ) : <p>No address found!</p>}
           </div>
         </div>
       </main>

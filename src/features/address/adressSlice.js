@@ -63,6 +63,7 @@ export const addressSlice = createSlice({
     })
     // Fulfilled case for deleteAddressAsync
     builder.addCase(deleteAddressAsync.fulfilled, (state, action) => {
+      console.log(action.payload)
       state.addresses = state.addresses.filter(address => address._id !== action.payload.deletedAddress._id)
     })
   }

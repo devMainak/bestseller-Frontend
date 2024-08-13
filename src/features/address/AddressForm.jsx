@@ -36,7 +36,6 @@ const AddressForm = () => {
           }
         } else {
           const updatedAdderss = {houseNumber, street, city, state, country, postalCode: parseInt(postalCode)}
-          console.log(address._id)
           const resultAction = await dispatch(updateAddressAsync({addressId: address._id, address: updatedAdderss}))
           if (updateAddressAsync.fulfilled.match(resultAction))
           {
@@ -56,6 +55,22 @@ const AddressForm = () => {
       console.error(error)
     }
   }
+
+  // Async function to delete address and validate deletion of address
+  const handleDeleteAddress = async () => {
+    try {
+      const resultAction = await dispatch(deleteAddressAsync(address._id))
+      if (deleteAddressAsync.fulfilled.match(resultAction))
+      {
+        setAlert("Address deleted successfully!")
+        setTimeout(() => {
+          setAlert("")
+        }, 2000)
+      }
+    } catch (error) {
+      throw error
+    }
+  }
   
   return (
     <>
@@ -70,8 +85,8 @@ const AddressForm = () => {
             <input onChange={(e) => setCountry(e.target.value)} className="form-control mb-3" type="text" placeholder="Country" value={country}/>
             <input onChange={(e) => setPostalCode(e.target.value)} className="form-control mb-3" type="number" placeholder="Postal Code" value={postalCode}/>
             <button className="btn btn-danger" type='submit'>{address ? "Update" : "Add"}</button>
-            <button className="btn btn btn-light text-danger bg-danger-subtle mx-3">Delete</button>
           </form>
+        
           {alert && <p className='fs-4 py-4'>{alert}</p>}
       </main>
     </>
