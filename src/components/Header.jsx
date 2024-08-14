@@ -1,5 +1,6 @@
-import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux'
+import { useState, useEffect } from 'react'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux'
 // Import images if they are in the src directory
 import wishlistIcon from '../../public/wishlist.svg';  
 // Adjust the path as needed
@@ -7,6 +8,30 @@ import cartIcon from '../../public/red-cart.svg';
 // Adjust the path as needed
 
 const Header = () => {
+  // Configuring useNavigation for usage
+  const navigate = useNavigate()
+  // Configuring searchParams
+  const [searchParmas, setSearchParams] = useSearchParams()
+  // state bindings
+  const [query, setQuery] = useState(searchParmas.get('query') || '')
+
+  // Query search
+  
+  // Functionto handle search request
+  const handleSearchResquests = (e) => {
+    e.preventDefault()
+    if (query.length > 2)
+    {
+      // Update the search parameters in the URL
+      setSearchParams({ query })
+      navigate(`/books/search?query=${query}`)
+    }
+  }
+
+  // Handle input change
+  const handleInputChange = (e) => {
+    setQuery(e.target.value)
+  }
   
   return (
     <nav className="navbar navbar-expand-lg bg-danger-subtle sticky-top">
@@ -17,7 +42,7 @@ const Header = () => {
           </Link>
         </div>
         <div>
-          <form className="d-flex" role="search">
+          <form className="d-flex" role="search" onSubmit={handleSearchResquests}>
             <div className='input-group'>
               <span className='input-group-text bg-light'>🔍</span>
               <input
@@ -25,7 +50,9 @@ const Header = () => {
                 type="search"
                 placeholder="Search for books"
                 aria-label="Search"
+                onChange={handleInputChange}
               />
+              <button className="btn btn-outline-secondary" type="submit">Search</button>
             </div>
           </form>
         </div>
