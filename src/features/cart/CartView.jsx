@@ -5,23 +5,29 @@ import { fetchCart, updateBookInCartAsync, deleteBookFromCartAsync } from './car
 import Header from '../../components/Header'
 import { fetchWishlist, addBookToWishlistAsync } from '../wishlist/wishlistSlice'
 import { fetchBooks } from '../books/booksSlice'
+import { fetchAddresses } from '../address/adressSlice'
 
 const CartView = () => {
   // Configuring useDispatch for usage
   const dispatch = useDispatch()
   // alert for notification
   const [alert, setAlert] = useState('')
+  // State bindings for default configs
+  const [shippingAddress, setShippingAddress] = useState('')
+  const [showPriceDetails, setShowPriceDetails] = useState(false)
   // Fetching cart on page load
   useEffect(() => {
     dispatch(fetchCart())
     dispatch(fetchWishlist())
     dispatch(fetchBooks())
+    dispatch(fetchAddresses())
   }, [])
   
-  // Extracting cart && wishlist && books from state for validation
+  // Extracting cart && wishlist && books && addresses from state for validation
   const { cart, status, error } = useSelector(state => state.cart)
   const { wishlist } = useSelector(state => state.wishlist)
   const { books } = useSelector(state => state.books)
+  const { addresses } = useSelector(state => state.address)
 
   // Async function to add book to Wishlist from  cart
   const handleAddToWishlist = async (bookToAdd) => {
@@ -94,10 +100,23 @@ const CartView = () => {
       console.error(error)
     }
   }
+
+  // Function to handle shipping address
+  const handleShippingAddress = (e) => {
+    const addressId = e.target.value
+    const addressToShip = addresses.find(address => address._id === addressId)
+    setShippingAddress(addressToShip)
+  }
   
   // Calculating total items in cart
   const totalItems = cart.reduce((acc, curr) => {
     acc = acc + curr.quantity 
+    return acc
+  }, 0)
+
+  // Calculating total cart price
+  const totalCartPrice = cart.reduce((acc, curr) => {
+    acc = acc + (curr.price * curr.quantity)
     return acc
   }, 0)
 
@@ -185,9 +204,48 @@ const CartView = () => {
           <div className='col-md-4'>
             <div className='card'>
               <div className='card-body'>
+                <img src='https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg' className='img-fluid' style={{height: "76px", borderRadius: "50%"}}/>
+                <p className='fs-5 pt-2'>John Doe <br/> +1-555‑0100 <br/>johndoe@testemail.com</p>
+                {shippingAddress && <p className='fs-5'>Shipping Address- <br/> {shippingAddress.houseNumber}, {shippingAddress.street}, {shippingAddress.city}, {shippingAddress.state}, {shippingAddress.country} - {shippingAddress.postalCode}</p>}
+                <select className='form-select' onChange={handleShippingAddress}>
+                  <option value="">Select Shipping Address</option>
+                  {addresses.map(address => (
+                    <option key={address._id} value={address._id}>{address.houseNumber}, {address.street}, {address.city}, {address.state}, {address.country} - {address.postalCode}</option>
+                  ))}
+                </select>
+              <hr/>
                 <p className='fs-4 fw-semibold'>PRICE DETAILS</p>
-                <div className="d-grid gap-2">
-                  <button className="btn btn-danger" type="button">Check Out</button>
+                {showPriceDetails && (<div>
+                      <div className='row'>
+                        <div className='col-6'>
+                          <span>Items ({totalItems} Items)</span>
+                          <br/>
+                          <span>Delivery</span>
+                          <br/>
+                          <span>Discount</span>
+                        </div>
+                        <div className='col-6'>
+                          <span>{totalCartPrice.toFixed(2)}</span>
+                          <br/>
+                          <span>80.00</span>
+                          <br/>
+                          <span>80.00</span>
+                        </div>
+                      </div>
+                      <hr/>
+                      <div className='row'>
+                        <div className='col-6'>
+                          <div className='fs-5 fw-semibold text-danger'>Subtotal:</div>
+                        </div>
+                        <div className='col-6'>
+                          <div className='fs-5'>₹{totalCartPrice.toFixed(2)}</div>
+                        </div>
+                      </div>
+                </div>
+                                    )}
+                
+                <div className="d-grid gap-2 pt-3">
+                  <button className="btn btn-danger" disabled={shippingAddress ? false : true} type="button" onClick={() => setShowPriceDetails(true)}>{showPriceDetails ? "Place Order" : "Check Out"}</button>
                 </div>
               </div>
             </div>
