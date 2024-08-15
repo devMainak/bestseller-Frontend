@@ -101,7 +101,7 @@ const BookList = ({ books }) => {
         </div>
       )}
       <div className="row">
-        {books.length > 0 &&
+        {books.length > 0 ?
           books.map((book) => {
             return (
               <div className="col-sm-6 mb-3" key={book._id}>
@@ -147,7 +147,7 @@ const BookList = ({ books }) => {
                 </div>
               </div>
             );
-          })}
+          }) : <p className="text-center fs-4">No books found!</p>}
       </div>
     </div>
   );

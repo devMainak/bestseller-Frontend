@@ -52,7 +52,6 @@ const Header = () => {
                 aria-label="Search"
                 onChange={handleInputChange}
               />
-              <button className="btn btn-outline-secondary" type="submit">Search</button>
             </div>
           </form>
         </div>
