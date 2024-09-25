@@ -3,28 +3,28 @@ import axios from 'axios'
 
 // Async function to read books in cart
 export const fetchCart = createAsyncThunk("fetch/cart", async () => {
-  const response = await axios.get("https://9dbaed3b-94c5-4327-8a1b-6921422f3eba-00-32qwd9xgzzr57.pike.replit.dev/cart")
+  const response = await axios.get("https://bestseller-backend.vercel.app/cart")
 
   return response.data
 })
 
 // Async function to add to book to cart
 export const addBookToCartAsync = createAsyncThunk("add/cart", async (book) => {
-  const response = await axios.post("https://9dbaed3b-94c5-4327-8a1b-6921422f3eba-00-32qwd9xgzzr57.pike.replit.dev/cart", book)
+  const response = await axios.post("https://bestseller-backend.vercel.app/cart", book)
 
   return response.data
 })
 
 // Async function to update book in cart
 export const updateBookInCartAsync = createAsyncThunk("update/cart", async ({bookId, book}) => {
-  const response = await axios.put(`https://9dbaed3b-94c5-4327-8a1b-6921422f3eba-00-32qwd9xgzzr57.pike.replit.dev/cart/${bookId}`, book)
+  const response = await axios.put(`https://bestseller-backend.vercel.app/cart/${bookId}`, book)
 
   return response.data
 })
 
 // Async function to delete book from cart
 export const deleteBookFromCartAsync = createAsyncThunk("delete/cart", async (bookId) => {
-  const response = await axios.delete(`https://9dbaed3b-94c5-4327-8a1b-6921422f3eba-00-32qwd9xgzzr57.pike.replit.dev/cart/${bookId}`)
+  const response = await axios.delete(`https://bestseller-backend.vercel.app/cart/${bookId}`)
 
   return response.data
 })

@@ -3,7 +3,7 @@ import axios from "axios";
 
 // Async to function to fetch wishlist books
 export const fetchWishlist = createAsyncThunk("fetch/wishlist", async () => {
-  const response = await axios.get("https://9dbaed3b-94c5-4327-8a1b-6921422f3eba-00-32qwd9xgzzr57.pike.replit.dev/wishlist")
+  const response = await axios.get("https://bestseller-backend.vercel.app/wishlist")
 
   return response.data
 })
@@ -13,7 +13,7 @@ export const addBookToWishlistAsync = createAsyncThunk(
   "add/wishlist",
   async (book) => {
     const response = await axios.post(
-      "https://9dbaed3b-94c5-4327-8a1b-6921422f3eba-00-32qwd9xgzzr57.pike.replit.dev/wishlist", book)
+      "https://bestseller-backend.vercel.app/wishlist", book)
 
     return response.data;
   }
@@ -24,7 +24,7 @@ export const deleteBookFromWishlistAsync = createAsyncThunk(
   "delete/wishlist",
   async (bookId) => {
     const response = await axios.delete(
-      `https://9dbaed3b-94c5-4327-8a1b-6921422f3eba-00-32qwd9xgzzr57.pike.replit.dev/wishlist/${bookId}`)
+      `https://bestseller-backend.vercel.app/wishlist/${bookId}`)
 
     return response.data;
   }

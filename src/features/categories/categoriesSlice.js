@@ -3,7 +3,7 @@ import axios from 'axios'
 
 // Async function to fetch categories
 export const fetchCategories = createAsyncThunk("fetch/categories", async () => {
-  const response = await axios.get("https://9dbaed3b-94c5-4327-8a1b-6921422f3eba-00-32qwd9xgzzr57.pike.replit.dev/categories")
+  const response = await axios.get("https://bestseller-backend.vercel.app/categories")
 
   return response.data
 })
