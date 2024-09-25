@@ -56,7 +56,7 @@ const Header = () => {
           </form>
         </div>
         <div>
-          <Link className="btn btn-danger" to="/login">
+          <Link className="btn btn-danger" to="#">
             Login
           </Link>
           <Link to="/wishlist">
