@@ -20,7 +20,7 @@ const router = createBrowserRouter([
 		element: <App/>
 	},
 	{
-		path: "/books/:bookCategory?"tw,
+		path: "/books/:bookCategory?",
 		element: <BookView/>
 	},
 	{

@@ -3,28 +3,28 @@ import axios from 'axios'
 
 // Async function to read all addresses
 export const fetchAddresses = createAsyncThunk("fetch/addresses", async () => {
-  const response = await axios.get("https://9dbaed3b-94c5-4327-8a1b-6921422f3eba-00-32qwd9xgzzr57.pike.replit.dev/user/address")
+  const response = await axios.get("https://bestseller-backend.vercel.app/user/address")
 
   return response.data
 })
 
 // Async function to add new address
 export const addNewAddressAsync = createAsyncThunk("add/address", async (address) => {
-  const response = await axios.post("https://9dbaed3b-94c5-4327-8a1b-6921422f3eba-00-32qwd9xgzzr57.pike.replit.dev/user/address", address)
+  const response = await axios.post("https://bestseller-backend.vercel.app/user/address", address)
 
   return response.data
 })
 
 // Async function to update existing address
 export const updateAddressAsync = createAsyncThunk("update/address", async ({addressId, address}) => {
-  const response = await axios.put(`https://9dbaed3b-94c5-4327-8a1b-6921422f3eba-00-32qwd9xgzzr57.pike.replit.dev/user/address/${addressId}`, address)
+  const response = await axios.put(`https://bestseller-backend.vercel.app/user/address/${addressId}`, address)
 
   return response.data
 })
 
 // Async function to delete an address
 export const deleteAddressAsync = createAsyncThunk("delete/address", async (addressId) => {
-  const response = await axios.delete(`https://9dbaed3b-94c5-4327-8a1b-6921422f3eba-00-32qwd9xgzzr57.pike.replit.dev/user/address/${addressId}`)
+  const response = await axios.delete(`https://bestseller-backend.vercel.app/user/address/${addressId}`)
 
   return response.data
 })
