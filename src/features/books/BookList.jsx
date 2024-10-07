@@ -106,7 +106,7 @@ const BookList = ({ books }) => {
             return (
               <div className="col-sm-6 mb-3" key={book._id}>
                 <div className="card h-100">
-                  <div className="row g-0">
+                  <div className="row g-0 h-100">
                     <div className="col-md-4">
                       <Link
                         to={`/books/${book.categoryName}/${book._id}`}
