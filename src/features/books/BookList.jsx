@@ -14,8 +14,7 @@ const BookList = ({ books }) => {
   // Accessing wishlist to validate addition and deletion
   const { wishlist } = useSelector((state) => state.wishlist);
   // Accessing cart to validate addition and deletion
-  const { cart } = useSelector(state => state.cart)
-
+  const { cart } = useSelector((state) => state.cart);
 
   // Async function to handle addition and validation to Wishlist
   const handleAddToWishlist = async (bookToSave) => {
@@ -41,35 +40,40 @@ const BookList = ({ books }) => {
 
   // Async function to handle addition and validation to cart
   const handleAddToCart = async (bookToSave) => {
-    const bookToUpdate = cart.find(book => book.title === bookToSave.title)
+    const bookToUpdate = cart.find((book) => book.title === bookToSave.title);
     try {
-    if (bookToUpdate) {
-      const updatedQuantity = Number(bookToUpdate.quantity) + 1; // Ensure quantity is a number
-      const updatedBook = { ...bookToUpdate, quantity: updatedQuantity };
+      if (bookToUpdate) {
+        const updatedQuantity = Number(bookToUpdate.quantity) + 1; // Ensure quantity is a number
+        const updatedBook = { ...bookToUpdate, quantity: updatedQuantity };
 
-      const resultAction = await dispatch(updateBookInCartAsync({bookId: updatedBook._id, book: updatedBook}));
-     
-      if (updateBookInCartAsync.fulfilled.match(resultAction))
-      {
-        setAlert("Book quantity updated successfully in cart.")
-        setTimeout(() => {
-          setAlert("");
-        }, 2000);
+        const resultAction = await dispatch(
+          updateBookInCartAsync({ bookId: updatedBook._id, book: updatedBook })
+        );
+
+        if (updateBookInCartAsync.fulfilled.match(resultAction)) {
+          setAlert("Book quantity updated successfully in cart.");
+          setTimeout(() => {
+            setAlert("");
+          }, 2000);
+        }
+      } else {
+        const resultAction = await dispatch(addBookToCartAsync(bookToSave));
+        if (addBookToCartAsync.fulfilled.match(resultAction)) {
+          setAlert("Added to cart");
+          setTimeout(() => {
+            setAlert("");
+          }, 2000);
+        }
       }
-    } else {
-      const resultAction = await dispatch(addBookToCartAsync(bookToSave))
-      if (addBookToCartAsync.fulfilled.match(resultAction))
-      {
-        setAlert("Added to cart")
-        setTimeout(() => {
-          setAlert("");
-        }, 2000);
-      }
-    }
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
+
+  const calculateBooksFinalPrice = (price, discount) => {
+    if (discount > 0) return price - price * (discount / 100);
+    return price;
+  };
 
   return (
     <div className="my-4 container" style={{ width: "100%" }}>
@@ -101,10 +105,15 @@ const BookList = ({ books }) => {
         </div>
       )}
       <div className="row">
-        {books.length > 0 ?
+        {books.length > 0 ? (
           books.map((book) => {
+            const booksFinalPrice = calculateBooksFinalPrice(
+              book.price,
+              book.discount
+            );
+
             return (
-              <div className="col-sm-6 mb-3" key={book._id}>
+              <div className="col-6 mb-3" key={book._id}>
                 <div className="card h-100">
                   <div className="row g-0 h-100">
                     <div className="col-md-4">
@@ -128,9 +137,23 @@ const BookList = ({ books }) => {
                         <p className="card-text btn btn-danger">
                           ⭐ {book.rating.toFixed(1)}
                         </p>
-                        <p className="fs-5 fw-normal">₹{book.price}</p>
+                        <p className="fs-5 fw-normal">
+                          <span className="fw-semibold">₹{Math.round(booksFinalPrice)}</span>{" "}
+                          {book.discount > 0 && (
+                            <span style={{ textDecoration: "line-through", fontSize: "15px" }}>
+                              M.R.P ₹{book.price}
+                            </span>
+                          )}{" "}
+                          {book.discount > 0 && (
+                            <small className="text-danger fw-bold">{`(%${book.discount} off)`}</small>
+                          )}
+                        </p>
                         <div className="d-grid gap-2">
-                          <button className="btn btn-danger" type="button" onClick={() => handleAddToCart(book)}>
+                          <button
+                            className="btn btn-danger"
+                            type="button"
+                            onClick={() => handleAddToCart(book)}
+                          >
                             Add to Cart
                           </button>
                           <button
@@ -147,7 +170,10 @@ const BookList = ({ books }) => {
                 </div>
               </div>
             );
-          }) : <p className="text-center fs-4">No books found!</p>}
+          })
+        ) : (
+          <p className="text-center fs-4">No books found!</p>
+        )}
       </div>
     </div>
   );
