@@ -48,7 +48,7 @@ const Wishlist = () => {
 
   // Async function to move book from wishlist to cart
   const handleMoveToCart = async (bookToSave) => {
-    const bookToUpdate = cart.find((book) => book.title === bookToSave.title);
+    const bookToUpdate = cart.find((item) => item.book._id === bookToSave._id);
     try {
       if (bookToUpdate) {
         const updatedQuantity = Number(bookToUpdate.quantity) + 1; // Ensure quantity is a number
@@ -65,7 +65,9 @@ const Wishlist = () => {
           }, 2000);
         }
       } else {
-        const resultAction = await dispatch(addBookToCartAsync(bookToSave));
+        const resultAction = await dispatch(
+          addBookToCartAsync({ book: bookToSave._id })
+        );
         if (addBookToCartAsync.fulfilled.match(resultAction)) {
           setAlert("Added to cart");
           setTimeout(() => {
@@ -118,23 +120,20 @@ const Wishlist = () => {
           )}
           {wishlist.length > 0 && (
             <ul className="list-group pb-5">
-              {wishlist.map((book) => {
-                const matchingBook = books.find(
-                  (currBook) => currBook.title === book.title
-                );
-                const bookId = matchingBook ? matchingBook._id : null;
+              {wishlist.map((item) => {
+                const { book } = item;
 
                 return (
                   <li
                     className="list-group-item"
                     style={{ height: "3in" }}
-                    key={book._id}
+                    key={item._id}
                   >
                     <div className="d-flex justify-content-between">
                       <div className="d-flex flex-grow-1">
                         <div>
                           <Link
-                            to={`/books/${book.categoryName}/${bookId}`}
+                            to={`/books/${book.categoryName}/${book._id}`}
                             state={books}
                           >
                             <img
@@ -153,27 +152,26 @@ const Wishlist = () => {
                         </div>
                       </div>
                       <div className="flex-grow-2">
-                      <div className="d-grid gap-2">
-                        <button
-                          className="btn btn-danger"
-                          style={{width: "300px"}}
-                          type="button"
-                          onClick={() => handleMoveToCart(book)}
-                        >
-                          Move to Cart
-                        </button>
-                        <button
-                          className="btn btn-danger text-danger bg-danger-subtle"
-                          style={{width: "300px"}}
-                          type="button"
-                          onClick={() => handleDeleteFromWishlist(book._id)}
-                        >
-                          Remove from Wishlist
-                        </button>
+                        <div className="d-grid gap-2">
+                          <button
+                            className="btn btn-danger"
+                            style={{ width: "300px" }}
+                            type="button"
+                            onClick={() => handleMoveToCart(book)}
+                          >
+                            Move to Cart
+                          </button>
+                          <button
+                            className="btn btn-danger text-danger bg-danger-subtle"
+                            style={{ width: "300px" }}
+                            type="button"
+                            onClick={() => handleDeleteFromWishlist(book._id)}
+                          >
+                            Remove from Wishlist
+                          </button>
+                        </div>
                       </div>
                     </div>
-                    </div>
-                   
                   </li>
                 );
               })}

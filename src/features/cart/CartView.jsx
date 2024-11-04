@@ -13,12 +13,16 @@ import {
 } from "../wishlist/wishlistSlice";
 import { fetchBooks } from "../books/booksSlice";
 import { fetchAddresses } from "../address/adressSlice";
+import { calculateBooksFinalPrice } from "../books/BookList";
 
 const CartView = () => {
+  
   // Configuring useDispatch for usage
   const dispatch = useDispatch();
+  
   // alert for notification
   const [alert, setAlert] = useState("");
+  
   // State bindings for default configs
   const [shippingAddress, setShippingAddress] = useState("");
   const [showPriceDetails, setShowPriceDetails] = useState(false);
@@ -36,16 +40,18 @@ const CartView = () => {
   const { books } = useSelector((state) => state.books);
   const { addresses } = useSelector((state) => state.address);
 
+  console.log(cart)
+
   // Async function to add book to Wishlist from  cart
   const handleAddToWishlist = async (bookToAdd) => {
-    if (wishlist.some((book) => book.title === bookToAdd.title)) {
+    if (wishlist.some((item) => item.book._id === bookToAdd._id)) {
       setAlert("Book is already in Wishlist.");
       setTimeout(() => {
         setAlert("");
       }, 2000);
     } else {
       try {
-        const resultAction = await dispatch(addBookToWishlistAsync(bookToAdd));
+        const resultAction = await dispatch(addBookToWishlistAsync({book: bookToAdd._id}));
         if (addBookToWishlistAsync.fulfilled.match(resultAction)) {
           setAlert("Added to Wishlist");
           setTimeout(() => {
@@ -124,7 +130,8 @@ const CartView = () => {
 
   // Calculating total cart price
   const totalCartPrice = cart.reduce((acc, curr) => {
-    acc = acc + curr.price * curr.quantity;
+    const currFinalPrice = calculateBooksFinalPrice(curr.book.price, curr.book.discount);
+    acc = acc + currFinalPrice * curr.quantity;
     return acc;
   }, 0);
 
@@ -171,22 +178,21 @@ const CartView = () => {
           <div className="row pb-5">
             <div className="col-md-8">
               <ul className="list-group">
-                {cart.map((book) => {
-                  const matchingBook = books.find(
-                    (currBook) => currBook.title === book.title
-                  );
-                  const bookId = matchingBook ? matchingBook._id : null;
-
+                {cart.map((item) => {
+                  const {book} = item;
+                  console.log(book)
+                  // Calculating each books final price
+                  const booksFinalPrice = calculateBooksFinalPrice(book.price, book.discount)
                   return (
                     <li
                       className="list-group-item d-flex justify-content-between"
                       style={{ height: "3.5in" }}
-                      key={book._id}
+                      key={item._id}
                     >
                       <div className="d-flex">
                         <div>
                           <Link
-                            to={`/books/${book.categoryName}/${bookId}`}
+                            to={`/books/${book.categoryName}/${book._id}`}
                             state={books}
                           >
                             <img
@@ -197,13 +203,30 @@ const CartView = () => {
                           </Link>
                         </div>
                         <div className="px-4 w-50">
-                          <p className="fs-4 fw-normal">{book.title}</p>
+                          <div className="fs-4 fw-normal">{book.title}</div>
                           <p>by {book.author}</p>
-                          <p className="card-text btn btn-danger">
-                            ⭐ {book.rating.toFixed(1)}
+                          {/* <p className="card-text btn btn-danger">
+                            ⭐ {book.rating}
+                          </p> */}
+                          <p className="fs-4">
+                            <span className="fw-semibold">
+                              ₹{Math.round(booksFinalPrice)}
+                            </span>{" "}
+                            {book.discount > 0 && (
+                              <span
+                                style={{
+                                  textDecoration: "line-through",
+                                  fontSize: "15px",
+                                }}
+                              >
+                                M.R.P ₹{book.price}
+                              </span>
+                            )}{" "}
+                            {book.discount > 0 && (
+                              <small className="text-danger fw-bold">{`(%${book.discount} off)`}</small>
+                            )}
                           </p>
-                          <p className="fs-4">₹ {book.price}/-</p>
-                          <p className="fs-4">Free Delivery</p>
+                          {book.isDeliveryFree && <p className="fs-4">Free Delivery</p>}
                         </div>
                       </div>
                       <div>
@@ -219,11 +242,11 @@ const CartView = () => {
                               textAlign: "center",
                             }}
                             className="bg-danger"
-                            onClick={() => handleIncreaseBookQuantity(book)}
+                            onClick={() => handleIncreaseBookQuantity(item)}
                           >
                             +
                           </button>
-                          <span className="fs-4 px-2">{book.quantity}</span>
+                          <span className="fs-4 px-2">{item.quantity}</span>
                           <button
                             style={{
                               borderRadius: "5px",
@@ -233,7 +256,7 @@ const CartView = () => {
                               textAlign: "center",
                             }}
                             className="bg-danger-subtle"
-                            onClick={() => handleDecreaseBookQuantity(book)}
+                            onClick={() => handleDecreaseBookQuantity(item)}
                           >
                             {" "}
                             -{" "}

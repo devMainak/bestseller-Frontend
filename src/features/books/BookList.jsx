@@ -4,6 +4,12 @@ import { addBookToWishlistAsync } from "../wishlist/wishlistSlice";
 import { useState } from "react";
 import { addBookToCartAsync, updateBookInCartAsync } from "../cart/cartSlice";
 
+// Calculate the final price of the book if there is a discount
+export const calculateBooksFinalPrice = (price, discount) => {
+  if (discount > 0) return price - price * (discount / 100);
+  return price;
+};
+
 const BookList = ({ books }) => {
   // State variable for alert
   const [alert, setAlert] = useState("");
@@ -18,14 +24,14 @@ const BookList = ({ books }) => {
 
   // Async function to handle addition and validation to Wishlist
   const handleAddToWishlist = async (bookToSave) => {
-    if (wishlist.some((book) => book.title === bookToSave.title)) {
+    if (wishlist.some((item) => item.book._id === bookToSave._id)) {
       setAlert("Book is already in Wishlist");
       setTimeout(() => {
         setAlert("");
       }, 2000);
     } else {
       try {
-        const resultAction = await dispatch(addBookToWishlistAsync(bookToSave));
+        const resultAction = await dispatch(addBookToWishlistAsync({book: bookToSave._id}));
         if (addBookToWishlistAsync.fulfilled.match(resultAction)) {
           setAlert("Book successfully added to Wishlist");
           setTimeout(() => {
@@ -40,7 +46,7 @@ const BookList = ({ books }) => {
 
   // Async function to handle addition and validation to cart
   const handleAddToCart = async (bookToSave) => {
-    const bookToUpdate = cart.find((book) => book.title === bookToSave.title);
+    const bookToUpdate = cart.find((item) => item.book._id === bookToSave._id);
     try {
       if (bookToUpdate) {
         const updatedQuantity = Number(bookToUpdate.quantity) + 1; // Ensure quantity is a number
@@ -57,7 +63,7 @@ const BookList = ({ books }) => {
           }, 2000);
         }
       } else {
-        const resultAction = await dispatch(addBookToCartAsync(bookToSave));
+        const resultAction = await dispatch(addBookToCartAsync({book: bookToSave._id}));
         if (addBookToCartAsync.fulfilled.match(resultAction)) {
           setAlert("Added to cart");
           setTimeout(() => {
@@ -68,11 +74,6 @@ const BookList = ({ books }) => {
     } catch (error) {
       console.error(error);
     }
-  };
-
-  const calculateBooksFinalPrice = (price, discount) => {
-    if (discount > 0) return price - price * (discount / 100);
-    return price;
   };
 
   return (
@@ -138,9 +139,16 @@ const BookList = ({ books }) => {
                           ⭐ {book.rating.toFixed(1)}
                         </p>
                         <p className="fs-5 fw-normal">
-                          <span className="fw-semibold">₹{Math.round(booksFinalPrice)}</span>{" "}
+                          <span className="fw-semibold">
+                            ₹{Math.round(booksFinalPrice)}
+                          </span>{" "}
                           {book.discount > 0 && (
-                            <span style={{ textDecoration: "line-through", fontSize: "15px" }}>
+                            <span
+                              style={{
+                                textDecoration: "line-through",
+                                fontSize: "15px",
+                              }}
+                            >
                               M.R.P ₹{book.price}
                             </span>
                           )}{" "}
