@@ -16,13 +16,12 @@ import { fetchAddresses } from "../address/adressSlice";
 import { calculateBooksFinalPrice } from "../books/BookList";
 
 const CartView = () => {
-  
   // Configuring useDispatch for usage
   const dispatch = useDispatch();
-  
+
   // alert for notification
   const [alert, setAlert] = useState("");
-  
+
   // State bindings for default configs
   const [shippingAddress, setShippingAddress] = useState("");
   const [showPriceDetails, setShowPriceDetails] = useState(false);
@@ -40,7 +39,7 @@ const CartView = () => {
   const { books } = useSelector((state) => state.books);
   const { addresses } = useSelector((state) => state.address);
 
-  console.log(cart)
+  console.log(cart);
 
   // Async function to add book to Wishlist from  cart
   const handleAddToWishlist = async (bookToAdd) => {
@@ -51,7 +50,9 @@ const CartView = () => {
       }, 2000);
     } else {
       try {
-        const resultAction = await dispatch(addBookToWishlistAsync({book: bookToAdd._id}));
+        const resultAction = await dispatch(
+          addBookToWishlistAsync({ book: bookToAdd._id })
+        );
         if (addBookToWishlistAsync.fulfilled.match(resultAction)) {
           setAlert("Added to Wishlist");
           setTimeout(() => {
@@ -130,7 +131,10 @@ const CartView = () => {
 
   // Calculating total cart price
   const totalCartPrice = cart.reduce((acc, curr) => {
-    const currFinalPrice = calculateBooksFinalPrice(curr.book.price, curr.book.discount);
+    const currFinalPrice = calculateBooksFinalPrice(
+      curr.book.price,
+      curr.book.discount
+    );
     acc = acc + currFinalPrice * curr.quantity;
     return acc;
   }, 0);
@@ -179,10 +183,13 @@ const CartView = () => {
             <div className="col-md-8">
               <ul className="list-group">
                 {cart.map((item) => {
-                  const {book} = item;
-                  console.log(book)
+                  const { book } = item;
+                  console.log(book);
                   // Calculating each books final price
-                  const booksFinalPrice = calculateBooksFinalPrice(book.price, book.discount)
+                  const booksFinalPrice = calculateBooksFinalPrice(
+                    book.price,
+                    book.discount
+                  );
                   return (
                     <li
                       className="list-group-item d-flex justify-content-between"
@@ -226,7 +233,9 @@ const CartView = () => {
                               <small className="text-danger fw-bold">{`(%${book.discount} off)`}</small>
                             )}
                           </p>
-                          {book.isDeliveryFree && <p className="fs-4">Free Delivery</p>}
+                          {book.isDeliveryFree && (
+                            <p className="fs-4">Free Delivery</p>
+                          )}
                         </div>
                       </div>
                       <div>
@@ -273,7 +282,7 @@ const CartView = () => {
                           <button
                             className="btn btn-light text-danger bg-danger-subtle"
                             type="button"
-                            onClick={() => handleRemoveFromCart(book._id)}
+                            onClick={() => handleRemoveFromCart(item._id)}
                           >
                             Remove
                           </button>

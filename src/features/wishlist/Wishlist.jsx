@@ -165,7 +165,7 @@ const Wishlist = () => {
                             className="btn btn-danger text-danger bg-danger-subtle"
                             style={{ width: "300px" }}
                             type="button"
-                            onClick={() => handleDeleteFromWishlist(book._id)}
+                            onClick={() => handleDeleteFromWishlist(item._id)}
                           >
                             Remove from Wishlist
                           </button>
