@@ -22,7 +22,7 @@ const BookDetails = () => {
   const { bookId } = useParams();
 
   // Finding the book from books state array
-  const book = books.find((book) => book._id === bookId);
+  const book = books.find((book) => book._id == bookId);
 
   console.log(wishlist);
   // Async function to handle addition and validation to Wishlist
@@ -34,7 +34,9 @@ const BookDetails = () => {
       }, 2000);
     } else {
       try {
-        const resultAction = await dispatch(addBookToWishlistAsync({book: bookToSave._id}));
+        const resultAction = await dispatch(
+          addBookToWishlistAsync({ book: bookToSave._id })
+        );
         if (addBookToWishlistAsync.fulfilled.match(resultAction)) {
           setAlert("Book successfully added to Wishlist");
         }
