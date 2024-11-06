@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { addBookToWishlistAsync } from "../wishlist/wishlistSlice";
 import { useState } from "react";
 import { addBookToCartAsync, updateBookInCartAsync } from "../cart/cartSlice";
+import { width } from "@fortawesome/free-solid-svg-icons/fa0";
 
 // Calculate the final price of the book if there is a discount
 export const calculateBooksFinalPrice = (price, discount) => {
@@ -159,7 +160,7 @@ const BookList = ({ books }) => {
                           <small className="text-danger fw-bold">{`(%${book.discount} off)`}</small>
                         )}
                       </p>
-                      <div className="d-grid gap-2">
+                      <div className="d-grid gap-2" style={{width: "230px"}}>
                         <button
                           className="btn btn-danger"
                           type="button"
