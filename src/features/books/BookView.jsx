@@ -117,7 +117,7 @@ const BookView = () => {
       <Header />
       <main>
         <button
-          className="filter-btn text-light fs-4"
+          className="filter-btn text-light fs-4 py-3"
           onClick={() =>
             setFilterDisplay(filterDisplay === true ? false : true)
           }
