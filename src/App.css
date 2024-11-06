@@ -1,8 +1,94 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+
+main {
+  margin-top: 3rem;
+}
 
 .trending-card {
-    width: 250px; 
-    height: 350px;
-    border: 1px solid black; 
-    border-radius: 5px;
+  width: 250px;
+  height: 350px;
+  border: 1px solid black;
+  border-radius: 5px;
 }
+
+.list-img {
+  height: 300px;
+  width: 200px;
+}
+
+.card-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-bar {
+  width: 3in;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin-top: 3rem;
+}
+
+.main-content {
+  margin-left: 3in; /* Matches the sidebar width */
+  padding: 20px;
+}
+
+.filter-btn {
+  display: none;
+  width: 100vw;
+  background-color: #dc3545;
+  border-bottom: 2px solid white;
+}
+
+
+@media (max-width: 768px) {
+  .btn-group {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .list-img {
+    height: 200px;
+    width: 100px;
+  }
+
+  .card-details {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  main {
+    margin-top: 5rem;
+  }
+
+  .filter-bar {
+    width: 100%;
+    height: auto;
+    position: static; /* Removes fixed position on small screens */
+    padding: 15px;
+    /* margin-top: 5rem; */
+  }
+
+  .main-content {
+    margin-left: 0; /* Reset margin for full-width layout */
+    margin-top: 10px; /* Optional spacing between filter bar and content */
+  }
+
+  .filter-btn {
+    display: block;
+  }
+
+  .cart-container {
+    flex-direction: row-reverse;
+  }
+}
+
+
+@media (min-width: 768px) {
+    .filter-bar {
+      display: block !important;
+    }
+  }
