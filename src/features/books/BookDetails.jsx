@@ -24,7 +24,6 @@ const BookDetails = () => {
   // Finding the book from books state array
   const book = books.find((book) => book._id == bookId);
 
-  console.log(wishlist);
   // Async function to handle addition and validation to Wishlist
   const handleAddToWishlist = async (bookToSave) => {
     if (wishlist.some((item) => item.book._id === bookToSave._id)) {
@@ -91,7 +90,7 @@ const BookDetails = () => {
       <Header />
       <main className="container">
         <div
-          className="d-flex justify-content-center py-5"
+          className="d-flex flex-wrap justify-content-center py-5"
           style={{ gap: "2rem" }}
         >
           <div>

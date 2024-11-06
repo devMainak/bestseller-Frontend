@@ -34,7 +34,7 @@ const Header = () => {
   }
   
   return (
-    <nav className="navbar navbar-expand-lg bg-danger-subtle sticky-top">
+    <nav className="navbar navbar-expand-lg bg-danger-subtle fixed-top">
       <div className="container container-fluid d-flex justify-content-between">
         <div>
           <Link className="navbar-brand text-danger fs-4 fw-semibold" to="/">

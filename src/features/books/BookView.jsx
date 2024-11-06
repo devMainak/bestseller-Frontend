@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Header from "../../components/Header";
 import BookList from "./BookList";
@@ -11,11 +11,13 @@ import {
   setSortByPrice,
   clearFilters,
 } from "./booksSlice";
-import { useParams, useSearchParams, Outlet } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { fetchWishlist } from "../wishlist/wishlistSlice";
 import { fetchCart } from "../cart/cartSlice";
 
 const BookView = () => {
+  const [filterDisplay, setFilterDisplay] = useState(false);
+
   // making use of the useDispatch hook
   const dispatch = useDispatch();
   // Configuring search params for usage
@@ -80,19 +82,19 @@ const BookView = () => {
   };
 
   // Filtered books by category
-  const filteredBooksByCategory = categoryFilter &&  books.filter((book) =>
-    categoryFilter.includes(book.categoryName),
-  );
+  const filteredBooksByCategory =
+    categoryFilter &&
+    books.filter((book) => categoryFilter.includes(book.categoryName));
 
   // Sorted books by priceSlider value
-  const sortedBooksByPriceSlider = filteredBooksByCategory && filteredBooksByCategory.filter(
-    (book) => book.price > priceSlider,
-  );
+  const sortedBooksByPriceSlider =
+    filteredBooksByCategory &&
+    filteredBooksByCategory.filter((book) => book.price > priceSlider);
 
   // Sorted books by rating
-  const sortedBooksByRating = sortedBooksByPriceSlider && sortedBooksByPriceSlider.filter(
-    (book) => book.rating >= sortByRating,
-  );
+  const sortedBooksByRating =
+    sortedBooksByPriceSlider &&
+    sortedBooksByPriceSlider.filter((book) => book.rating >= sortByRating);
 
   // Sorted book by price
   const sortedBooksByPrice =
@@ -101,22 +103,31 @@ const BookView = () => {
       : sortedBooksByRating.sort((a, b) => a.price - b.price);
 
   // Finding the searched book
-  const searchedBook = query && books.filter(
-    (book) =>
-      book.title.toLowerCase().includes(query.toLowerCase()) ||
-      book.author.toLowerCase().includes(query.toLowerCase()),
-  );
+  const searchedBook =
+    query &&
+    books.filter(
+      (book) =>
+        book.title.toLowerCase().includes(query.toLowerCase()) ||
+        book.author.toLowerCase().includes(query.toLowerCase())
+    );
 
-  console.log(searchedBook)
 
   return (
     <>
       <Header />
       <main>
-        <div className="d-flex">
+        <button
+          className="filter-btn text-light fs-4"
+          onClick={() =>
+            setFilterDisplay(filterDisplay === true ? false : true)
+          }
+        >
+          Filters
+        </button>
+        <div className="d-flex flex-column flex-md-row">
           <div
-            className="align-items-start text-light bg-danger px-5 py-4"
-            style={{ minWidth: "3in", height: "100vh", position: "fixed" }}
+            className="filter-bar flex-grow-1 align-items-start text-light bg-danger px-5 py-4"
+            style={{ display: filterDisplay ? "block" : "none" }}
           >
             <section className="py-3 d-flex justify-content-between">
               <lable className="fs-5 fw-normal">Filters</lable>
@@ -233,11 +244,12 @@ const BookView = () => {
               </label>
             </section>
           </div>
-          <div style={{ marginLeft: "3in", padding: "1rem" }}>
-            <BookList books={searchedBook ? searchedBook : sortedBooksByPrice} />
+          <div className="main-content flex-grow-1">
+            <BookList
+              books={searchedBook ? searchedBook : sortedBooksByPrice}
+            />
           </div>
         </div>
-        <Outlet />
       </main>
     </>
   );

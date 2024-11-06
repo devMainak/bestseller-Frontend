@@ -124,13 +124,9 @@ const Wishlist = () => {
                 const { book } = item;
 
                 return (
-                  <li
-                    className="list-group-item"
-                    style={{ height: "3in" }}
-                    key={item._id}
-                  >
-                    <div className="d-flex justify-content-between">
-                      <div className="d-flex flex-grow-1">
+                  <li className="list-group-item" key={item._id}>
+                    <div className="d-flex justify-content-between flex-wrap">
+                      <div className="d-flex flex-grow-1 pb-4">
                         <div>
                           <Link
                             to={`/books/${book.categoryName}/${book._id}`}
@@ -138,12 +134,12 @@ const Wishlist = () => {
                           >
                             <img
                               src={book.coverImageUrl}
-                              className="img-fluid"
-                              style={{ height: "250px", width: "150px" }}
+                              className="list-img"
+                              
                             />
                           </Link>
                         </div>
-                        <div className="mx-4">
+                        <div className="mx-4" style={{width: "600px"}}>
                           <p className="fs-4 fw-normal w-50">{book.title}</p>
                           <p>by {book.author}</p>
                           <p className="card-text btn btn-danger">
@@ -151,7 +147,7 @@ const Wishlist = () => {
                           </p>
                         </div>
                       </div>
-                      <div className="flex-grow-2">
+                      <div className="flex-grow-1 text-center">
                         <div className="d-grid gap-2">
                           <button
                             className="btn btn-danger"

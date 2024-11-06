@@ -180,7 +180,7 @@ const CartView = () => {
         )}
         {cart.length > 0 && (
           <div className="row pb-5">
-            <div className="col-md-8">
+            <div className="col-md-8 mb-4">
               <ul className="list-group">
                 {cart.map((item) => {
                   const { book } = item;
@@ -192,29 +192,27 @@ const CartView = () => {
                   );
                   return (
                     <li
-                      className="list-group-item d-flex justify-content-between"
-                      style={{ height: "3.5in" }}
+                      className="list-group-item d-flex flex-wrap justify-content-between"
                       key={item._id}
                     >
-                      <div className="d-flex">
-                        <div>
+                      <div
+                        className="d-flex flex-grow-1"
+                        style={{ width: "500px" }}
+                      >
+                        <div className="align-items-center">
                           <Link
                             to={`/books/${book.categoryName}/${book._id}`}
                             state={books}
                           >
                             <img
                               src={book.coverImageUrl}
-                              className="img-fluid"
-                              style={{ height: "100%", width: "200px" }}
+                              className="list-img"
                             />
                           </Link>
                         </div>
                         <div className="px-4 w-50">
                           <div className="fs-4 fw-normal">{book.title}</div>
                           <p>by {book.author}</p>
-                          {/* <p className="card-text btn btn-danger">
-                            ⭐ {book.rating}
-                          </p> */}
                           <p className="fs-4">
                             <span className="fw-semibold">
                               ₹{Math.round(booksFinalPrice)}
@@ -238,7 +236,7 @@ const CartView = () => {
                           )}
                         </div>
                       </div>
-                      <div>
+                      <div className="card-details">
                         <div className="pb-5">
                           <lable className="fs-4">Quantity: </lable>
                           <br />
@@ -271,21 +269,25 @@ const CartView = () => {
                             -{" "}
                           </button>
                         </div>
-                        <div className="d-grid gap-2">
-                          <button
-                            className="btn btn-danger"
-                            type="button"
-                            onClick={() => handleAddToWishlist(book)}
-                          >
-                            + Wislist
-                          </button>
-                          <button
-                            className="btn btn-light text-danger bg-danger-subtle"
-                            type="button"
-                            onClick={() => handleRemoveFromCart(item._id)}
-                          >
-                            Remove
-                          </button>
+                        <div className="d-grid gap-2 btn-group">
+                          <div>
+                            <button
+                              className="btn btn-danger"
+                              type="button"
+                              onClick={() => handleAddToWishlist(book)}
+                            >
+                              + Wislist
+                            </button>
+                          </div>
+                          <div>
+                            <button
+                              className="btn btn-light text-danger bg-danger-subtle"
+                              type="button"
+                              onClick={() => handleRemoveFromCart(item._id)}
+                            >
+                              Remove
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </li>

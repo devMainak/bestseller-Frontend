@@ -89,6 +89,16 @@ const Home = () => {
                   style={{ height: "500px" }}
                   alt="..."
                 />
+                <div className="card-img-overlay text-light align-self-center">
+                  <p className="text-center text-dark fs-4 fw-semibold">
+                    <em style={{ fontFamily: "Noto Serif" }}>
+                      “If you only read the books that everyone else is reading,{" "}
+                      <br /> you can only think what everyone else is thinking.”<br/>
+                      <span className="text-white">- Haruki Murakami </span>
+                    </em>
+                   
+                  </p>
+                </div>
               </div>
             </div>
             <button
@@ -119,7 +129,7 @@ const Home = () => {
         </div>
       </section>
       <CategoryList categories={categories} />
-      <hr className="container"/>
+      <hr className="container" />
       <Trending />
       <TopRated />
     </div>
