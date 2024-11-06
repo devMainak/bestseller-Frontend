@@ -120,7 +120,7 @@ const BookList = ({ books }) => {
 
             return (
               <li className="list-group-item" key={book._id}>
-                <div className="d-flex gap-3 flex-wrap">
+                <div className="d-flex gap-3">
                   <div>
                     <Link
                       to={`/books/${book.categoryName}/${book._id}`}
