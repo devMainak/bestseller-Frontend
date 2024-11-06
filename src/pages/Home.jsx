@@ -62,7 +62,7 @@ const Home = () => {
           <div className="carousel-inner">
             <div className="carousel-item active">
               <img
-                src="../../public/books-hero.jpg"
+                src="https://i.pinimg.com/564x/0e/bb/64/0ebb6477186da4a48ea616925f1573f9.jpg"
                 className="img-fluid d-block w-100"
                 style={{ height: "500px" }}
                 alt="..."
