@@ -90,7 +90,7 @@ const BookDetails = () => {
       <Header />
       <main className="container">
         <div
-          className="d-flex flex-wrap justify-content-center py-5"
+          className="d-flex details-container justify-content-center py-5"
           style={{ gap: "2rem" }}
         >
           <div>
