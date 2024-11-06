@@ -31,7 +31,9 @@ const BookList = ({ books }) => {
       }, 2000);
     } else {
       try {
-        const resultAction = await dispatch(addBookToWishlistAsync({book: bookToSave._id}));
+        const resultAction = await dispatch(
+          addBookToWishlistAsync({ book: bookToSave._id })
+        );
         if (addBookToWishlistAsync.fulfilled.match(resultAction)) {
           setAlert("Book successfully added to Wishlist");
           setTimeout(() => {
@@ -63,7 +65,9 @@ const BookList = ({ books }) => {
           }, 2000);
         }
       } else {
-        const resultAction = await dispatch(addBookToCartAsync({book: bookToSave._id}));
+        const resultAction = await dispatch(
+          addBookToCartAsync({ book: bookToSave._id })
+        );
         if (addBookToCartAsync.fulfilled.match(resultAction)) {
           setAlert("Added to cart");
           setTimeout(() => {
@@ -77,7 +81,7 @@ const BookList = ({ books }) => {
   };
 
   return (
-    <div className="my-4 container" style={{ width: "100%" }}>
+    <div className="my-4 container" style={{ width: "100%"}}>
       {status === "loading" && (
         <div className="spinner-border text-danger" role="status">
           <span className="visually-hidden">Loading...</span>
@@ -105,7 +109,7 @@ const BookList = ({ books }) => {
           </div>
         </div>
       )}
-      <div className="row">
+      <ul className="list-group w-100">
         {books.length > 0 ? (
           books.map((book) => {
             const booksFinalPrice = calculateBooksFinalPrice(
@@ -114,75 +118,73 @@ const BookList = ({ books }) => {
             );
 
             return (
-              <div className="col-6 mb-3" key={book._id}>
-                <div className="card h-100">
-                  <div className="row g-0 h-100">
-                    <div className="col-md-4">
-                      <Link
-                        to={`/books/${book.categoryName}/${book._id}`}
-                        state={books}
-                        style={{ textDecoration: "none" }}
-                      >
-                        <img
-                          src={book.coverImageUrl}
-                          className="img-fluid rounded-start"
-                          alt={book.title}
-                          style={{ height: "100%" }}
-                        />
-                      </Link>
-                    </div>
-                    <div className="col-md-8">
-                      <div className="card-body">
-                        <h5 className="card-title">{book.title}</h5>
-                        <p className="card-text">by {book.author}</p>
-                        <p className="card-text btn btn-danger">
-                          ⭐ {book.rating.toFixed(1)}
-                        </p>
-                        <p className="fs-5 fw-normal">
-                          <span className="fw-semibold">
-                            ₹{Math.round(booksFinalPrice)}
-                          </span>{" "}
-                          {book.discount > 0 && (
-                            <span
-                              style={{
-                                textDecoration: "line-through",
-                                fontSize: "15px",
-                              }}
-                            >
-                              M.R.P ₹{book.price}
-                            </span>
-                          )}{" "}
-                          {book.discount > 0 && (
-                            <small className="text-danger fw-bold">{`(%${book.discount} off)`}</small>
-                          )}
-                        </p>
-                        <div className="d-grid gap-2">
-                          <button
-                            className="btn btn-danger"
-                            type="button"
-                            onClick={() => handleAddToCart(book)}
+              <li className="list-group-item" key={book._id}>
+                <div className="d-flex gap-3 flex-wrap">
+                  <div>
+                    <Link
+                      to={`/books/${book.categoryName}/${book._id}`}
+                      state={books}
+                      style={{ textDecoration: "none" }}
+                    >
+                      <img
+                        src={book.coverImageUrl}
+                        className="list-img"
+                        alt={book.title}
+                        
+                      />
+                    </Link>
+                  </div>
+                  <div>
+                    <div className="card-body">
+                      <h5 className="card-title">{book.title}</h5>
+                      <p className="card-text">by {book.author}</p>
+                      <p className="card-text btn btn-danger">
+                        ⭐ {book.rating.toFixed(1)}
+                      </p>
+                      <p className="fs-5 fw-normal">
+                        <span className="fw-semibold">
+                          ₹{Math.round(booksFinalPrice)}
+                        </span>{" "}
+                        {book.discount > 0 && (
+                          <span
+                            style={{
+                              textDecoration: "line-through",
+                              fontSize: "15px",
+                            }}
                           >
-                            Add to Cart
-                          </button>
-                          <button
-                            className="btn btn-light text-danger bg-danger-subtle"
-                            type="button"
-                            onClick={() => handleAddToWishlist(book)}
-                          >
-                            Add to Wishlist
-                          </button>
-                        </div>
+                            M.R.P ₹{book.price}
+                          </span>
+                        )}{" "}
+                        {book.discount > 0 && (
+                          <small className="text-danger fw-bold">{`(%${book.discount} off)`}</small>
+                        )}
+                      </p>
+                      <div className="d-grid gap-2">
+                        <button
+                          className="btn btn-danger"
+                          type="button"
+                          onClick={() => handleAddToCart(book)}
+                        >
+                          Add to Cart
+                        </button>
+                        <button
+                          className="btn btn-light text-danger bg-danger-subtle"
+                          type="button"
+                          onClick={() => handleAddToWishlist(book)}
+                        >
+                          Add to Wishlist
+                        </button>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </li>
             );
           })
         ) : (
           <p className="text-center fs-4">No books found!</p>
         )}
-      </div>
+      </ul>
     </div>
   );
 };

@@ -147,7 +147,7 @@ const Wishlist = () => {
                           </p>
                         </div>
                       </div>
-                      <div className="flex-grow-1 text-center">
+                      <div className="flex-grow-1">
                         <div className="d-grid gap-2">
                           <button
                             className="btn btn-danger"
