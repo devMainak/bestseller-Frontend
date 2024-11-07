@@ -1,5 +1,6 @@
 import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import "@fortawesome/fontawesome-free/css/all.min.css";
 import Header from './components/Header'
 import Home from './pages/Home'
 import Footer from './components/Footer'
