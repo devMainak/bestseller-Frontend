@@ -39,7 +39,6 @@ const CartView = () => {
   const { books } = useSelector((state) => state.books);
   const { addresses } = useSelector((state) => state.address);
 
-  console.log(cart);
 
   // Async function to add book to Wishlist from  cart
   const handleAddToWishlist = async (bookToAdd) => {
