@@ -120,7 +120,7 @@ const BookList = ({ books }) => {
 
             return (
               <li className="list-group-item" key={book._id}>
-                <div className="d-flex gap-3">
+                <div className="d-flex justify-content-start gap-3">
                   <div>
                     <Link
                       to={`/books/${book.categoryName}/${book._id}`}
@@ -134,7 +134,7 @@ const BookList = ({ books }) => {
                       />
                     </Link>
                   </div>
-                  <div>
+                  <div className="flex-grow-1">
                     <div className="card-body">
                       <h5 className="card-title">{book.title}</h5>
                       <p className="card-text">by {book.author}</p>
@@ -159,7 +159,7 @@ const BookList = ({ books }) => {
                           <small className="text-danger fw-bold">{`(%${book.discount} off)`}</small>
                         )}
                       </p>
-                      <div className="d-grid gap-2" style={{maxWidth: "15rem"}}>
+                      <div className="d-grid gap-2" style={{maxWidth: "15rem",}}>
                         <button
                           className="btn btn-danger"
                           type="button"

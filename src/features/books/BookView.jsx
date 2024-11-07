@@ -244,7 +244,7 @@ const BookView = () => {
             </section>
             <section className="py-3 d-flex justify-content-end">
               <button
-                className="btn btn-outline-light apply-filter-btn fw-semibold"
+                className="btn-outline-light apply-filter-btn fw-semibold"
                 onClick={() =>
                   setFilterDisplay(filterDisplay === true ? false : true)
                 }

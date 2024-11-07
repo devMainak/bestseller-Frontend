@@ -45,6 +45,11 @@ main {
 
 .apply-filter-btn {
   display: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: #dc3545;
+  border: 2px solid white ;
+  color: white;
 }
 
 @media (max-width: 768px) {
