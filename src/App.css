@@ -38,10 +38,14 @@ main {
 .filter-btn {
   display: none;
   width: 100vw;
+  position: fixed;
   background-color: #dc3545;
   border-bottom: 2px solid white;
 }
 
+.apply-filter-btn {
+  display: none;
+}
 
 @media (max-width: 768px) {
   .btn-group {
@@ -66,8 +70,9 @@ main {
 
   .filter-bar {
     width: 100%;
-    height: auto;
-    position: static; /* Removes fixed position on small screens */
+    z-index: 100;
+    margin-top: 90px;
+    position: fixed; /* Removes fixed position on small screens */
     padding: 15px;
     /* margin-top: 5rem; */
   }
@@ -75,6 +80,7 @@ main {
   .main-content {
     margin-left: 0; /* Reset margin for full-width layout */
     margin-top: 10px; /* Optional spacing between filter bar and content */
+    padding-top: 90px;
   }
 
   .filter-btn {
@@ -87,6 +93,10 @@ main {
 
   .details-container {
     flex-wrap: wrap;
+  }
+
+  .apply-filter-btn {
+    display: inline-block;
   }
 }
 

@@ -111,7 +111,6 @@ const BookView = () => {
         book.author.toLowerCase().includes(query.toLowerCase())
     );
 
-
   return (
     <>
       <Header />
@@ -242,6 +241,16 @@ const BookView = () => {
                 />{" "}
                 Price - High to Low
               </label>
+            </section>
+            <section className="py-3 d-flex justify-content-end">
+              <button
+                className="btn btn-outline-light apply-filter-btn fw-semibold"
+                onClick={() =>
+                  setFilterDisplay(filterDisplay === true ? false : true)
+                }
+              >
+                Apply
+              </button>
             </section>
           </div>
           <div className="main-content flex-grow-1">
