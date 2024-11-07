@@ -184,7 +184,6 @@ const CartView = () => {
               <ul className="list-group">
                 {cart.map((item) => {
                   const { book } = item;
-                  console.log(book);
                   // Calculating each books final price
                   const booksFinalPrice = calculateBooksFinalPrice(
                     book.price,
