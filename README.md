@@ -1,17 +1,68 @@
-## Running React on Replit
+# 📚 Bookstore Full-Stack Web App
 
-[React](https://reactjs.org/) is a popular JavaScript library for building user interfaces.
+A responsive and dynamic bookstore application built using modern web technologies. This application allows users to browse, search, and purchase books, manage their shopping wishlis, carts, and handle user addresses. The app is powered by a **React + Redux** frontend and a **Node.js + Express.js** backend with **MongoDB** as the database.
 
-[Vite](https://vitejs.dev/) is a blazing fast frontend build tool that includes features like Hot Module Reloading (HMR), optimized builds, and TypeScript support out of the box.
+---
 
-Using the two in conjunction is one of the fastest ways to build a web app.
+## 🚀 Features
 
-### Getting Started
-- Hit run
-- Edit [App.jsx](#src/App.jsx) and watch it live update!
+### Frontend:
+- 📖 Browse and search for books.
+- 🛒 Add and manage items in the shopping cart.
+- 👤 User address details.
+- 🎨 Fully responsive design for seamless use across devices.
 
-By default, Replit runs the `dev` script, but you can configure it by changing the `run` field in the [configuration file](#.replit). Here are the vite docs for [serving production websites](https://vitejs.dev/guide/build.html)
+### Backend:
+- 📚 CRUD operations for books.
+- ⚛️ Redux-persist to manage state across frontend.
+- 📜 RESTful APIs for seamless client-server communication.
+- 💾 Database integration with MongoDB using Mongoose.
 
-### Typescript
+---
 
-Just rename any file from `.jsx` to `.tsx`. You can also try our [TypeScript Template](https://replit.com/@replit/React-TypeScript)
+## 🛠️ Tech Stack
+
+### Frontend:
+- **React.js**: For building the user interface.
+- **Redux**: For state management.
+- **CSS/SCSS**: For styling.
+
+### Backend:
+- **Node.js**: For server-side JavaScript runtime.
+- **Express.js**: For building the REST API.
+- **MongoDB**: For the database.
+- **Mongoose**: For object modeling and schema management.
+
+### Other Tools:
+- **Axios**: For API requests.
+
+---
+
+## 🖼️ Screenshots
+
+### Homepage
+![Homepage Screenshot](./public/Home.png)
+
+### Book Details
+![Book Details Screenshot](./public/Book%20details.png)
+
+### Cart
+![Cart Screenshot](./public/Cart.png)
+
+*(Replace `#` with actual screenshot links)*
+
+---
+
+## 🏗️ Installation and Setup
+
+### Prerequisites
+Make sure you have the following installed:
+- Node.js (v16 or higher)
+- MongoDB (running locally or cloud instance)
+
+### Steps to Set Up
+
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/devMainak/bestseller-frontend.git
+   cd bookstore-web-app
