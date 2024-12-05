@@ -49,7 +49,6 @@ A responsive and dynamic bookstore application built using modern web technologi
 ### Cart
 ![Cart Screenshot](./public/Cart.png)
 
-*(Replace `#` with actual screenshot links)*
 
 ---
 
@@ -65,4 +64,4 @@ Make sure you have the following installed:
 1. **Clone the Repository**
    ```bash
    git clone https://github.com/devMainak/bestseller-frontend.git
-   cd bookstore-web-app
+   cd bestseller-frontend/
