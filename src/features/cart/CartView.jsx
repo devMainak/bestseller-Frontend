@@ -121,7 +121,12 @@ const CartView = () => {
     const addressToShip = addresses.find(
       (address) => address._id === addressId
     );
-    setShippingAddress(addressToShip);
+    if (addressToShip) {
+      setShippingAddress(addressToShip)
+    } else {
+      setShippingAddress("");
+      setShowPriceDetails(false)
+    }
   };
 
   // Show and hide order placed message
