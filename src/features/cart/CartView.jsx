@@ -22,6 +22,9 @@ const CartView = () => {
   // alert for notification
   const [alert, setAlert] = useState("");
 
+  // Message for placig successful order
+  const [showMessage, setShowMessage] = useState(false);
+
   // State bindings for default configs
   const [shippingAddress, setShippingAddress] = useState("");
   const [showPriceDetails, setShowPriceDetails] = useState(false);
@@ -38,7 +41,6 @@ const CartView = () => {
   const { wishlist } = useSelector((state) => state.wishlist);
   const { books } = useSelector((state) => state.books);
   const { addresses } = useSelector((state) => state.address);
-
 
   // Async function to add book to Wishlist from  cart
   const handleAddToWishlist = async (bookToAdd) => {
@@ -120,6 +122,14 @@ const CartView = () => {
       (address) => address._id === addressId
     );
     setShippingAddress(addressToShip);
+  };
+
+  // Show and hide order placed message
+  const showAndHideMessage = () => {
+    setShowMessage(true);
+    setTimeout(() => {
+      setShowMessage(false);
+    }, 2000);
   };
 
   // Calculating total items in cart
@@ -274,12 +284,12 @@ const CartView = () => {
                               type="button"
                               onClick={() => handleAddToWishlist(book)}
                             >
-                              + Wislist
+                              + Wishlist
                             </button>
                           </div>
                           <div>
                             <button
-                              className="btn btn-light text-danger bg-danger-subtle"
+                              className="btn btn-light text-danger bg-danger-subtle w-100"
                               type="button"
                               onClick={() => handleRemoveFromCart(item._id)}
                             >
@@ -305,7 +315,7 @@ const CartView = () => {
                     John Doe <br /> +1-555‑0100 <br />
                     johndoe@testemail.com
                   </p>
-                  {shippingAddress && (
+                  {shippingAddress !== "" && (
                     <p className="fs-5">
                       Shipping Address- <br /> {shippingAddress.houseNumber},{" "}
                       {shippingAddress.street}, {shippingAddress.city},{" "}
@@ -327,7 +337,7 @@ const CartView = () => {
                     ))}
                   </select>
                   <hr />
-                  <p className="fs-4 fw-semibold">PRICE DETAILS</p>
+                  <p className="fs-4 fw-semibold">Order Summary</p>
                   {showPriceDetails && (
                     <div>
                       <div className="row">
@@ -359,20 +369,31 @@ const CartView = () => {
                           </div>
                         </div>
                       </div>
+                      <button className="btn btn-danger mt-3 w-100" onClick={() => showAndHideMessage()}>
+                        Place order
+                      </button>
                     </div>
                   )}
 
                   <div className="d-grid gap-2 pt-3">
                     <button
                       className="btn btn-danger"
+                      style={{ display: showPriceDetails ? "none" : "block" }}
                       disabled={shippingAddress ? false : true}
                       type="button"
                       onClick={() => setShowPriceDetails(true)}
                     >
-                      {showPriceDetails ? "Place Order" : "Check Out"}
+                      Check Out
                     </button>
                   </div>
                 </div>
+              </div>
+              <div
+                style={{ display: showMessage ? "block" : "none" }}
+                class="alert alert-success mt-3 text-success fw-semibold"
+                role="alert"
+              >
+                ✅ Order Placed Successfully.
               </div>
             </div>
           </div>
