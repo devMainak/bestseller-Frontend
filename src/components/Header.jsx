@@ -26,16 +26,23 @@ const Header = () => {
     if (query.length > 2) {
       setSearchParams({ query });
       navigate(`/books/search?query=${query}`);
+    } else {
+      setSearchParams({});
+      navigate("/books");
     }
   };
 
   const handleInputChange = (e) => {
-    setQuery(e.target.value);
+    const value = e.target.value;
+    setQuery(value);
+    setSearchParams(value ? { query: value } : {}); // Dynamically update search params
   };
 
-
   // Calculating total cart products according to qty of each product
-  const totalCartProducts = cart.reduce((acc, curr) => acc += curr.quantity, 0);
+  const totalCartProducts = cart.reduce(
+    (acc, curr) => (acc += curr.quantity),
+    0
+  );
 
   return (
     <nav className="navbar navbar-expand-lg bg-danger-subtle fixed-top">
@@ -62,8 +69,8 @@ const Header = () => {
           </Link> */}
           <div className="icon-container position-relative mx-2">
             <Link to="/wishlist">
-            <i class="fa-solid fa-heart fs-4 text-danger"></i>
-            {wishlist.length > 0 && (
+              <i class="fa-solid fa-heart fs-4 text-danger"></i>
+              {wishlist.length > 0 && (
                 <span className="badge position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                   {wishlist.length}
                 </span>
@@ -72,7 +79,7 @@ const Header = () => {
           </div>
           <div className="icon-container position-relative mx-3">
             <Link to="/cart">
-            <i class="fa-solid fa-cart-shopping fs-4 text-danger"></i>
+              <i class="fa-solid fa-cart-shopping fs-4 text-danger"></i>
               {cart.length > 0 && (
                 <span className="badge position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger ">
                   {totalCartProducts}

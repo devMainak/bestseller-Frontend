@@ -67,7 +67,6 @@ const BookView = () => {
   // Function to set the current rating filter
   const handleRatingFilter = (e) => {
     dispatch(setSortByRating(parseInt(e.target.value)));
-    console.log(sortByRating);
   };
 
   // Function to set the current price sort method
@@ -81,35 +80,32 @@ const BookView = () => {
     dispatch(addToCategoryFilter(bookCategory));
   };
 
-  // Filtered books by category
-  const filteredBooksByCategory =
-    categoryFilter &&
-    books.filter((book) => categoryFilter.includes(book.categoryName));
-
-  // Sorted books by priceSlider value
-  const sortedBooksByPriceSlider =
-    filteredBooksByCategory &&
-    filteredBooksByCategory.filter((book) => book.price > priceSlider);
-
-  // Sorted books by rating
-  const sortedBooksByRating =
-    sortedBooksByPriceSlider &&
-    sortedBooksByPriceSlider.filter((book) => book.rating >= sortByRating);
+  // Filtered books
+  const filteredBooks = books
+    .filter((book) =>
+      categoryFilter.length > 0
+        ? categoryFilter.includes(book.categoryName)
+        : true
+    )
+    .filter((book) => book.price >= priceSlider)
+    .filter((book) => book.rating >= sortByRating);
 
   // Sorted book by price
   const sortedBooksByPrice =
-    sortedBooksByRating && sortByPrice === "HighToLow"
-      ? sortedBooksByRating.sort((a, b) => b.price - a.price)
-      : sortedBooksByRating.sort((a, b) => a.price - b.price);
+    sortByPrice === "HighToLow"
+      ? [...filteredBooks].sort((a, b) => b.price - a.price)
+      : [...filteredBooks].sort((a, b) => a.price - b.price);
 
   // Finding the searched book
-  const searchedBook =
-    query &&
-    books.filter(
-      (book) =>
-        book.title.toLowerCase().includes(query.toLowerCase()) ||
-        book.author.toLowerCase().includes(query.toLowerCase())
-    );
+  const finalBooks =
+    query && query.trim() !== ""
+      ? sortedBooksByPrice.filter(
+          (book) =>
+            book.title.toLowerCase().includes(query.toLowerCase()) ||
+            book.author.toLowerCase().includes(query.toLowerCase())
+        )
+      : sortedBooksByPrice;
+  console.log(finalBooks);
 
   return (
     <>
@@ -254,9 +250,7 @@ const BookView = () => {
             </section>
           </div>
           <div className="main-content flex-grow-1">
-            <BookList
-              books={searchedBook ? searchedBook : sortedBooksByPrice}
-            />
+            <BookList books={finalBooks} />
           </div>
         </div>
       </main>
