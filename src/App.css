@@ -48,8 +48,12 @@ main {
   padding: 5px 10px;
   border-radius: 5px;
   background-color: #dc3545;
-  border: 2px solid white ;
+  border: 2px solid white;
   color: white;
+}
+
+.book-details-btn {
+  width: 300px;
 }
 
 @media (max-width: 768px) {
@@ -109,9 +113,8 @@ main {
   }
 }
 
-
 @media (min-width: 768px) {
-    .filter-bar {
-      display: block !important;
-    }
+  .filter-bar {
+    display: block !important;
   }
+}

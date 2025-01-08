@@ -100,8 +100,8 @@ const BookDetails = () => {
               style={{ maxHeight: "50vh", maxWidth: "40vw" }}
             />
           </div>
-          <div className="mx-4" style={{ minxHeight: "50vh" }}>
-            <h3 className="display-3 fw-semibold">{book.title}</h3>
+          <div className="mx-4" style={{ minxHeight: "50vh", position: "relative" }}>
+            <h3 className="display-4 fw-semibold">{book.title}</h3>
             <p className="fs-4 fw-normal">
               by {book.author}, published in {book.publishedYear}
             </p>
@@ -147,16 +147,16 @@ const BookDetails = () => {
               )}
             </p>
             <p className="card-text fs-4">Free Delivery</p>
-            <div className="d-grid gap-2">
+            <div className="d-flex justify-content-center gap-2 w-100">
               <button
-                className="btn btn-danger"
+                className="btn btn-danger w-25"
                 type="button"
                 onClick={() => handleAddToCart(book)}
               >
                 Add to Cart
               </button>
               <button
-                className="btn btn-light text-danger bg-danger-subtle"
+                className="btn btn-light text-danger bg-danger-subtle w-25"
                 type="button"
                 onClick={() => handleAddToWishlist(book)}
               >

@@ -33,7 +33,7 @@ const BookView = () => {
     dispatch(fetchWishlist());
     dispatch(fetchCart());
     dispatch(clearFilters());
-    if (bookCategory) {
+    if (bookCategory !== "search" && bookCategory !== undefined) {
       dispatch(addToCategoryFilter(bookCategory));
     }
   }, []);
@@ -80,32 +80,40 @@ const BookView = () => {
     dispatch(addToCategoryFilter(bookCategory));
   };
 
-  // Filtered books
+  // Apply category, price, and rating filters to the searched books
   const filteredBooks = books
-    .filter((book) =>
-      categoryFilter.length > 0
-        ? categoryFilter.includes(book.categoryName)
-        : true
-    )
-    .filter((book) => book.price >= priceSlider)
-    .filter((book) => book.rating >= sortByRating);
+    .filter((book) => {
+      // Category filter: Only include books matching selected categories
+      if (categoryFilter.length > 0) {
+        return categoryFilter.includes(book.categoryName);
+      }
+      return true; // No category filter, include all
+    })
+    .filter((book) => {
+      // Price filter: Include books with price >= selected slider value
+      return book.price >= priceSlider;
+    })
+    .filter((book) => {
+      // Rating filter: Include books with rating >= selected rating
+      return book.rating >= sortByRating;
+    });
 
-  // Sorted book by price
+  // Sort the filtered books by price
   const sortedBooksByPrice =
     sortByPrice === "HighToLow"
       ? [...filteredBooks].sort((a, b) => b.price - a.price)
       : [...filteredBooks].sort((a, b) => a.price - b.price);
 
-  // Finding the searched book
+  // Filter books by search query first
+  console.log("Search:", query);
   const finalBooks =
-    query && query.trim() !== ""
+    categoryFilter.length == 0 && !categoryFilter.includes("search") && query
       ? sortedBooksByPrice.filter(
           (book) =>
-            book.title.toLowerCase().includes(query.toLowerCase()) ||
-            book.author.toLowerCase().includes(query.toLowerCase())
+            book.title.toLowerCase().includes(query.trim().toLowerCase()) ||
+            book.author.toLowerCase().includes(query.trim().toLowerCase())
         )
       : sortedBooksByPrice;
-  console.log(finalBooks);
 
   return (
     <>

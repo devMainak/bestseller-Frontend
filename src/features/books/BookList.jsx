@@ -84,8 +84,10 @@ const BookList = ({ books }) => {
   return (
     <div className="my-4 container" style={{ width: "100%" }}>
       {status === "loading" && (
-        <div className="spinner-border text-danger" role="status">
-          <span className="visually-hidden">Loading...</span>
+        <div className="d-flex justify-content-center">
+          <div className="spinner-border text-danger my-3" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
         </div>
       )}
       {error && <p className="fs-4 fw-normal">{error}</p>}
@@ -159,7 +161,10 @@ const BookList = ({ books }) => {
                           <small className="text-danger fw-bold">{`(%${book.discount} off)`}</small>
                         )}
                       </p>
-                      <div className="d-grid gap-2" style={{maxWidth: "15rem",}}>
+                      <div
+                        className="d-grid gap-2"
+                        style={{ maxWidth: "15rem" }}
+                      >
                         <button
                           className="btn btn-danger"
                           type="button"
