@@ -7,21 +7,19 @@ import Header from "../../components/Header";
 import { useState } from "react";
 
 const BookDetails = () => {
-  // Configuring dispatch for usage
   const dispatch = useDispatch();
-  // Alert state variable
+
   const [alert, setAlert] = useState("");
-  // Extracting wishlist for validation
+
   const { wishlist } = useSelector((state) => state.wishlist);
   const { cart } = useSelector((state) => state.cart);
-  // Configuring location for usage
+
   const location = useLocation();
-  // Extracting books from state
+
   const books = location.state;
-  // Extracting bookId using useParams()
+
   const { bookId } = useParams();
 
-  // Finding the book from books state array
   const book = books.find((book) => book._id == bookId);
 
   // Async function to handle addition and validation to Wishlist
@@ -50,7 +48,8 @@ const BookDetails = () => {
 
   // Async function to handle addition and validation to cart
   const handleAddToCart = async (bookToSave) => {
-    const bookToUpdate = cart.find((item) => item.book._id === bookToSave._id);
+    const bookToUpdate =
+      cart.length > 0 && cart.find((item) => item.book._id === bookToSave._id);
     try {
       if (bookToUpdate) {
         const updatedQuantity = Number(bookToUpdate.quantity) + 1; // Ensure quantity is a number
@@ -82,7 +81,6 @@ const BookDetails = () => {
     }
   };
 
-  // Calculate Final price
   const booksFinalPrice = calculateBooksFinalPrice(book.price, book.discount);
 
   return (
@@ -100,7 +98,10 @@ const BookDetails = () => {
               style={{ maxHeight: "50vh", maxWidth: "40vw" }}
             />
           </div>
-          <div className="mx-4" style={{ minxHeight: "50vh", position: "relative" }}>
+          <div
+            className="mx-4"
+            style={{ minxHeight: "50vh", position: "relative" }}
+          >
             <h3 className="display-4 fw-semibold">{book.title}</h3>
             <p className="fs-4 fw-normal">
               by {book.author}, published in {book.publishedYear}

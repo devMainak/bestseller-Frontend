@@ -12,15 +12,12 @@ export const calculateBooksFinalPrice = (price, discount) => {
 };
 
 const BookList = ({ books }) => {
-  // State variable for alert
   const [alert, setAlert] = useState("");
-  // Configuring useDispatch for usage
+
   const dispatch = useDispatch();
-  // Accessing status and error from store.books for loading handling
+
   const { status, error } = useSelector((state) => state.books);
-  // Accessing wishlist to validate addition and deletion
   const { wishlist } = useSelector((state) => state.wishlist);
-  // Accessing cart to validate addition and deletion
   const { cart } = useSelector((state) => state.cart);
 
   // Async function to handle addition and validation to Wishlist
@@ -49,7 +46,8 @@ const BookList = ({ books }) => {
 
   // Async function to handle addition and validation to cart
   const handleAddToCart = async (bookToSave) => {
-    const bookToUpdate = cart.find((item) => item.book._id === bookToSave._id);
+    const bookToUpdate =
+      cart.length > 0 && cart.find((item) => item.book._id === bookToSave._id);
     try {
       if (bookToUpdate) {
         const updatedQuantity = Number(bookToUpdate.quantity) + 1; // Ensure quantity is a number

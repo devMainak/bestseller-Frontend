@@ -6,6 +6,7 @@ import { categoriesSlice } from "../features/categories/categoriesSlice";
 import { wishlistSlice } from "../features/wishlist/wishlistSlice";
 import { cartSlice } from "../features/cart/cartSlice";
 import { addressSlice } from "../features/address/adressSlice";
+import { orderSlice } from "../features/orderhistory/orderHistorySlice";
 
 // Defining persist config
 const persistConfig = {
@@ -14,24 +15,21 @@ const persistConfig = {
   whitelist: ["books", "wishlist", "cart"],
 };
 
-// Combining reducers
 const rootReducer = combineReducers({
   books: booksSlice.reducer,
   categories: categoriesSlice.reducer,
   wishlist: wishlistSlice.reducer,
   cart: cartSlice.reducer,
   address: addressSlice.reducer,
+  order: orderSlice.reducer,
 });
 
-// Creating persisted reducer
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-// Configuring the store with the persisted reducer
 const store = configureStore({
   reducer: persistedReducer,
 });
 
-// Creating persistor
 export const persistor = persistStore(store);
 
 // Clear all persisted data

@@ -18,16 +18,11 @@ import { fetchCart } from "../cart/cartSlice";
 const BookView = () => {
   const [filterDisplay, setFilterDisplay] = useState(false);
 
-  // making use of the useDispatch hook
   const dispatch = useDispatch();
-  // Configuring search params for usage
   const [searchParams] = useSearchParams();
-  // extracting book category using useParams
   const { bookCategory } = useParams();
-  // Etracting search query
   const query = searchParams.get("query");
 
-  // Fetching books on page load && setting bookCategory on page load && Wishlist for validation
   useEffect(() => {
     dispatch(fetchBooks());
     dispatch(fetchWishlist());
@@ -38,7 +33,6 @@ const BookView = () => {
     }
   }, []);
 
-  // Destructuring the booksSlice and accessing the store with useSelector
   const {
     books,
     categoryFilter,
@@ -48,13 +42,11 @@ const BookView = () => {
     sortByPrice,
   } = useSelector((state) => state.books);
 
-  // Function to set the priceSlider value upon change
   const handlePriceSlider = (event) => {
     const value = event.target.value;
     dispatch(setPriceSlider(parseFloat(value)));
   };
 
-  // Function to handle categories and categoryFilters
   const handleCategoryFilter = (e) => {
     const { value, checked } = e.target;
     if (checked) {
@@ -64,48 +56,38 @@ const BookView = () => {
     }
   };
 
-  // Function to set the current rating filter
   const handleRatingFilter = (e) => {
     dispatch(setSortByRating(parseInt(e.target.value)));
   };
 
-  // Function to set the current price sort method
   const handleSortByPrice = (e) => {
     dispatch(setSortByPrice(e.target.value));
   };
 
-  // Function to clear and reset all filters
   const clearAllFilters = () => {
     dispatch(clearFilters());
     dispatch(addToCategoryFilter(bookCategory));
   };
 
-  // Apply category, price, and rating filters to the searched books
   const filteredBooks = books
     .filter((book) => {
-      // Category filter: Only include books matching selected categories
-      if (categoryFilter.length > 0) {
+      if (categoryFilter.length > 0 && !categoryFilter.includes("search")) {
         return categoryFilter.includes(book.categoryName);
       }
-      return true; // No category filter, include all
+      return true;
     })
     .filter((book) => {
-      // Price filter: Include books with price >= selected slider value
       return book.price >= priceSlider;
     })
     .filter((book) => {
-      // Rating filter: Include books with rating >= selected rating
       return book.rating >= sortByRating;
     });
 
-  // Sort the filtered books by price
   const sortedBooksByPrice =
     sortByPrice === "HighToLow"
       ? [...filteredBooks].sort((a, b) => b.price - a.price)
       : [...filteredBooks].sort((a, b) => a.price - b.price);
 
-  // Filter books by search query first
-  console.log("Search:", query);
   const finalBooks =
     categoryFilter.length == 0 && !categoryFilter.includes("search") && query
       ? sortedBooksByPrice.filter(

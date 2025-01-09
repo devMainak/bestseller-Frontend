@@ -2,17 +2,18 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const TopRated = ({}) => {
-  // Accessing books
   const { books, status, error } = useSelector((state) => state.books);
 
-  // Filtering trending books
   const trendingBooks = books.filter((book) => book.rating >= 9);
 
   return (
     <div>
       <section className="bg-danger-subtle py-4">
         <div className="container">
-        <h4 className="display-4 text-center pb-4" style={{ fontFamily: "Noto Serif" }}>
+          <h4
+            className="display-4 text-center pb-4"
+            style={{ fontFamily: "Noto Serif" }}
+          >
             <em>Top Rated</em>
           </h4>
           {status === "loading" && (

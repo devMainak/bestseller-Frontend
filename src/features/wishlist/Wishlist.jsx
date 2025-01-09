@@ -11,24 +11,18 @@ import {
 } from "../cart/cartSlice";
 
 const Wishlist = () => {
-  // configuring useDispatch for usage
-  const dispatch = useDispatch();
-
-  // alert for iteractivity
   const [alert, setAlert] = useState("");
 
-  // Fetching wishlist on page load
+  const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(fetchWishlist());
     dispatch(fetchBooks());
     dispatch(fetchCart());
   }, []);
 
-  // Destructuring the wishlistSlice
   const { wishlist, status, error } = useSelector((state) => state.wishlist);
-  // Destructuring the books
   const { books } = useSelector((state) => state.books);
-  // Destructuring the cart for addition and validation
   const { cart } = useSelector((state) => state.cart);
 
   // Async function to delete book from wishlist on click of btn
@@ -48,7 +42,8 @@ const Wishlist = () => {
 
   // Async function to move book from wishlist to cart
   const handleMoveToCart = async (bookToSave) => {
-    const bookToUpdate = cart.find((item) => item.book._id === bookToSave._id);
+    const bookToUpdate =
+      cart.length > 0 && cart.find((item) => item.book._id === bookToSave._id);
     try {
       if (bookToUpdate) {
         const updatedQuantity = Number(bookToUpdate.quantity) + 1; // Ensure quantity is a number
@@ -100,7 +95,7 @@ const Wishlist = () => {
           {alert && (
             <div className="row">
               <div
-                className="alert alert-success d-flex align-items-center"
+                className="alert alert-success d-flex justify-items-center"
                 role="alert"
                 style={{ height: "3rem" }}
               >
@@ -118,7 +113,7 @@ const Wishlist = () => {
               </div>
             </div>
           )}
-          {wishlist.length > 0 && (
+          {wishlist.length > 0 ? (
             <ul className="list-group pb-5">
               {wishlist.map((item) => {
                 const { book } = item;
@@ -135,11 +130,10 @@ const Wishlist = () => {
                             <img
                               src={book.coverImageUrl}
                               className="list-img"
-                              
                             />
                           </Link>
                         </div>
-                        <div className="mx-4" style={{width: "600px"}}>
+                        <div className="mx-4" style={{ width: "600px" }}>
                           <p className="fs-4 fw-normal w-50">{book.title}</p>
                           <p>by {book.author}</p>
                           <p className="card-text btn btn-danger">
@@ -172,6 +166,10 @@ const Wishlist = () => {
                 );
               })}
             </ul>
+          ) : (
+            <p className="fs-4 fw-semibold text-center">
+              Your wishlist is empty!
+            </p>
           )}
         </section>
       </main>

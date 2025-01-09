@@ -5,13 +5,11 @@ import { addNewAddressAsync, updateAddressAsync, deleteAddressAsync } from './ad
 import Header from "../../components/Header"
 
 const AddressForm = () => {
-  // Configuring useLocation for usage
+  
   const dispatch = useDispatch()
-  // Configuring useLocation for usage
   const location = useLocation()
-  // Extracting address if available
   const { address } = location.state || {}
-  // State bindings with values depending on predefined address
+
   const [houseNumber, setHouseNumber] = useState(address ? address.houseNumber : '')
   const [street, setStreet] = useState(address ? address.street : '')
   const [city, setCity] = useState(address ? address.city : '')
@@ -20,6 +18,7 @@ const AddressForm = () => {
   const [postalCode, setPostalCode] = useState(address ? address.postalCode : '')
   const [alert, setAlert] = useState('')
 
+  // Async function to add or update user address
   const addressFormHandler = async (e) => {
     e.preventDefault()
     try {
@@ -56,21 +55,6 @@ const AddressForm = () => {
     }
   }
 
-  // Async function to delete address and validate deletion of address
-  const handleDeleteAddress = async () => {
-    try {
-      const resultAction = await dispatch(deleteAddressAsync(address._id))
-      if (deleteAddressAsync.fulfilled.match(resultAction))
-      {
-        setAlert("Address deleted successfully!")
-        setTimeout(() => {
-          setAlert("")
-        }, 2000)
-      }
-    } catch (error) {
-      throw error
-    }
-  }
   
   return (
     <>

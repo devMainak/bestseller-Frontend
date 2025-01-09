@@ -5,6 +5,7 @@ import {
   fetchCart,
   updateBookInCartAsync,
   deleteBookFromCartAsync,
+  clearBooksFromCartAsync,
 } from "./cartSlice";
 import Header from "../../components/Header";
 import {
@@ -14,33 +15,34 @@ import {
 import { fetchBooks } from "../books/booksSlice";
 import { fetchAddresses } from "../address/adressSlice";
 import { calculateBooksFinalPrice } from "../books/BookList";
+import {
+  fetchOrderAsync,
+  saveOrderAsync,
+  updateOrderAsync,
+} from "../orderhistory/orderHistorySlice";
 
 const CartView = () => {
-  // Configuring useDispatch for usage
-  const dispatch = useDispatch();
-
-  // alert for notification
   const [alert, setAlert] = useState("");
-
-  // Message for placig successful order
   const [showMessage, setShowMessage] = useState(false);
 
-  // State bindings for default configs
+  const dispatch = useDispatch();
+
   const [shippingAddress, setShippingAddress] = useState("");
   const [showPriceDetails, setShowPriceDetails] = useState(false);
-  // Fetching cart on page load
+
   useEffect(() => {
     dispatch(fetchCart());
     dispatch(fetchWishlist());
     dispatch(fetchBooks());
     dispatch(fetchAddresses());
+    dispatch(fetchOrderAsync());
   }, []);
 
-  // Extracting cart && wishlist && books && addresses from state for validation
   const { cart, status, error } = useSelector((state) => state.cart);
   const { wishlist } = useSelector((state) => state.wishlist);
   const { books } = useSelector((state) => state.books);
   const { addresses } = useSelector((state) => state.address);
+  const orderState = useSelector((state) => state.order);
 
   // Async function to add book to Wishlist from  cart
   const handleAddToWishlist = async (bookToAdd) => {
@@ -122,36 +124,77 @@ const CartView = () => {
       (address) => address._id === addressId
     );
     if (addressToShip) {
-      setShippingAddress(addressToShip)
+      setShippingAddress(addressToShip);
     } else {
       setShippingAddress("");
-      setShowPriceDetails(false)
+      setShowPriceDetails(false);
     }
   };
 
   // Show and hide order placed message
-  const showAndHideMessage = () => {
-    setShowMessage(true);
-    setTimeout(() => {
-      setShowMessage(false);
-    }, 2000);
+  const placeOrderHandler = async () => {
+    try {
+      const booksIdDB = cart.map((item) => item.book._id);
+      console.log(booksIdDB);
+      if (orderState.order) {
+        const orderId = orderState.order._id;
+        const orderData = {
+          order: {
+            books: booksIdDB,
+            totalAmount: totalCartPrice,
+            totalBookCount: totalItems,
+          },
+        };
+        const resultAction = await dispatch(
+          updateOrderAsync({ orderId, order: orderData })
+        );
+        if (updateOrderAsync.fulfilled.match(resultAction)) {
+          setShowMessage(true);
+          setTimeout(() => {
+            setShowMessage(false);
+          }, 2000);
+          console.log(totalCartPrice);
+          await dispatch(clearBooksFromCartAsync());
+        }
+      } else {
+        const orderData = {
+          order: {
+            books: booksIdDB,
+            totalAmount: totalCartPrice,
+            totalBookCount: totalItems,
+          },
+        };
+        const resultAction = await dispatch(saveOrderAsync(orderData));
+        if (saveOrderAsync.fulfilled.match(resultAction)) {
+          setShowMessage(true);
+          setTimeout(() => {
+            setShowMessage(false);
+          }, 2000);
+          await dispatch(clearBooksFromCartAsync());
+        }
+      }
+    } catch (error) {
+      throw new Error(error);
+    }
   };
 
-  // Calculating total items in cart
-  const totalItems = cart.reduce((acc, curr) => {
-    acc = acc + curr.quantity;
-    return acc;
-  }, 0);
+  const totalItems =
+    cart.length > 0 &&
+    cart.reduce((acc, curr) => {
+      acc = acc + curr.quantity;
+      return acc;
+    }, 0);
 
-  // Calculating total cart price
-  const totalCartPrice = cart.reduce((acc, curr) => {
-    const currFinalPrice = calculateBooksFinalPrice(
-      curr.book.price,
-      curr.book.discount
-    );
-    acc = acc + currFinalPrice * curr.quantity;
-    return acc;
-  }, 0);
+  const totalCartPrice =
+    cart.length > 0 &&
+    cart.reduce((acc, curr) => {
+      const currFinalPrice = calculateBooksFinalPrice(
+        curr.book.price,
+        curr.book.discount
+      );
+      acc = acc + currFinalPrice * curr.quantity;
+      return acc;
+    }, 0);
 
   return (
     <>
@@ -192,13 +235,12 @@ const CartView = () => {
             </div>
           </div>
         )}
-        {cart.length > 0 && (
+        {cart.length > 0 ? (
           <div className="row pb-5">
             <div className="col-md-8 mb-4">
               <ul className="list-group">
                 {cart.map((item) => {
                   const { book } = item;
-                  // Calculating each books final price
                   const booksFinalPrice = calculateBooksFinalPrice(
                     book.price,
                     book.discount
@@ -354,7 +396,7 @@ const CartView = () => {
                           <span>Discount</span>
                         </div>
                         <div className="col-6">
-                          <span>{totalCartPrice.toFixed(2)}</span>
+                          <span>{Math.ceil(totalCartPrice).toFixed(2)}</span>
                           <br />
                           <span>80.00</span>
                           <br />
@@ -370,11 +412,14 @@ const CartView = () => {
                         </div>
                         <div className="col-6">
                           <div className="fs-5">
-                            ₹{totalCartPrice.toFixed(2)}
+                            ₹ {Math.ceil(totalCartPrice).toFixed(2)}/-
                           </div>
                         </div>
                       </div>
-                      <button className="btn btn-danger mt-3 w-100" onClick={() => showAndHideMessage()}>
+                      <button
+                        className="btn btn-danger mt-3 w-100"
+                        onClick={() => placeOrderHandler()}
+                      >
                         Place order
                       </button>
                     </div>
@@ -402,6 +447,8 @@ const CartView = () => {
               </div>
             </div>
           </div>
+        ) : (
+          <p className="fs-4 fw-semibold text-center">Add Books to Cart!</p>
         )}
       </main>
     </>

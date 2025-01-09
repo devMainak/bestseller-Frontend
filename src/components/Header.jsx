@@ -38,11 +38,8 @@ const Header = () => {
     setSearchParams(value ? { query: value } : {}); // Dynamically update search params
   };
 
-  // Calculating total cart products according to qty of each product
-  const totalCartProducts = cart.reduce(
-    (acc, curr) => (acc += curr.quantity),
-    0
-  );
+  const totalCartProducts =
+    cart.length > 0 ? cart.reduce((acc, curr) => (acc += curr.quantity), 0) : 0;
 
   return (
     <nav className="navbar navbar-expand-lg bg-danger-subtle fixed-top">
@@ -64,9 +61,6 @@ const Header = () => {
           </div>
         </form>
         <div className="d-flex align-items-center">
-          {/* <Link className="btn btn-sm btn-danger mx-2" to="#">
-            Login
-          </Link> */}
           <div className="icon-container position-relative mx-2">
             <Link to="/wishlist">
               <i class="fa-solid fa-heart fs-4 text-danger"></i>

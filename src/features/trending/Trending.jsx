@@ -3,17 +3,18 @@ import { useSelector } from "react-redux";
 import { calculateBooksFinalPrice } from "../books/BookList";
 
 const Trending = () => {
-  // Accessing books
   const { books, status, error } = useSelector((state) => state.books);
 
-  // Filtering top rated books
   const trendingBooks = books.filter((book) => book.discount > 15);
 
   return (
     <div>
       <section className="py-4">
         <div className="container">
-        <h4 className="display-4 text-center pb-4" style={{ fontFamily: "Noto Serif" }}>
+          <h4
+            className="display-4 text-center pb-4"
+            style={{ fontFamily: "Noto Serif" }}
+          >
             <em>Bestsellers</em>
           </h4>
           {status === "loading" && (

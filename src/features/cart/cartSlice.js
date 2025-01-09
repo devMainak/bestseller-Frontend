@@ -1,33 +1,57 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import axios from 'axios'
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 
-// Async function to read books in cart
+// Thunk functions for cartSlice
 export const fetchCart = createAsyncThunk("fetch/cart", async () => {
-  const response = await axios.get("https://bestseller-backend.vercel.app/cart")
+  const response = await axios.get(
+    "https://bestseller-backend.vercel.app/cart"
+  );
 
-  return response.data
-})
+  return response.data;
+});
 
-// Async function to add to book to cart
 export const addBookToCartAsync = createAsyncThunk("add/cart", async (book) => {
-  const response = await axios.post("https://bestseller-backend.vercel.app/cart", book)
+  const response = await axios.post(
+    "https://bestseller-backend.vercel.app/cart",
+    book
+  );
 
-  return response.data
-})
+  return response.data;
+});
 
-// Async function to update book in cart
-export const updateBookInCartAsync = createAsyncThunk("update/cart", async ({bookId, book}) => {
-  const response = await axios.put(`https://bestseller-backend.vercel.app/cart/${bookId}`, book)
+export const updateBookInCartAsync = createAsyncThunk(
+  "update/cart",
+  async ({ bookId, book }) => {
+    const response = await axios.put(
+      `https://bestseller-backend.vercel.app/cart/${bookId}`,
+      book
+    );
 
-  return response.data
-})
+    return response.data;
+  }
+);
 
-// Async function to delete book from cart
-export const deleteBookFromCartAsync = createAsyncThunk("delete/cart", async (bookId) => {
-  const response = await axios.delete(`https://bestseller-backend.vercel.app/cart/${bookId}`)
+export const deleteBookFromCartAsync = createAsyncThunk(
+  "delete/cart",
+  async (bookId) => {
+    const response = await axios.delete(
+      `https://bestseller-backend.vercel.app/cart/${bookId}`
+    );
 
-  return response.data
-})
+    return response.data;
+  }
+);
+
+export const clearBooksFromCartAsync = createAsyncThunk(
+  "clear/cart",
+  async () => {
+    const response = await axios.delete(
+      "https://bestseller-backend.vercel.app/cart/cart/clear"
+    );
+
+    return response.data;
+  }
+);
 
 // Creating redux slice for cart
 export const cartSlice = createSlice({
@@ -35,38 +59,48 @@ export const cartSlice = createSlice({
   initialState: {
     cart: [],
     status: "idle",
-    error: null
+    error: null,
   },
   reducers: {},
   extraReducers: (builder) => {
-    // Case for pending status of fetchCart
     builder.addCase(fetchCart.pending, (state) => {
-      state.status = "loading"
-    })
-    // Case for fulfilled status of fetchCart
-    builder.addCase(fetchCart.fulfilled, (state, action) => {
-      state.status = "success"
-      state.cart = action.payload
-    })
-    // Case for rejected status of fetchCart
-    builder.addCase(fetchCart.rejected, (state, action) => {
-      state.status = "error"
-      state.error = action.payload.error
-    })
-    // Case for fulfilled case of addBookToCartAsync
-    builder.addCase(addBookToCartAsync.fulfilled, (state, action) => {
-      state.cart.push(action.payload.savedBook)
-    })
-    // Case for fulfilled case of updateBookInCartAsync
-    builder.addCase(updateBookInCartAsync.fulfilled, (state, action) => {
-      state.cart = state.cart.map(book => book._id === action.payload.updatedBook._id ? action.payload.updatedBook : book)
-    })
-    // Case for fulfilled case of deleteBookFromCartAsync
-    builder.addCase(deleteBookFromCartAsync.fulfilled, (state, action) => {
-      state.cart = state.cart.filter(book => book._id !== action.payload.deletedBook._id)
-    })
-  }
-})
+      state.status = "loading";
+    });
 
-// Exporting the cartSlice reducer
-export default cartSlice.reducer
+    builder.addCase(fetchCart.fulfilled, (state, action) => {
+      console.log(action.payload);
+      state.status = "success";
+      state.cart = action.payload.cart || [];
+    });
+
+    builder.addCase(fetchCart.rejected, (state, action) => {
+      state.status = "error";
+      state.error = action.payload.error || "Failed to get books";
+    });
+
+    builder.addCase(addBookToCartAsync.fulfilled, (state, action) => {
+      console.log(state.cart);
+      state.cart.push(action.payload.savedBook);
+    });
+
+    builder.addCase(updateBookInCartAsync.fulfilled, (state, action) => {
+      state.cart = state.cart.map((book) =>
+        book._id === action.payload.updatedBook._id
+          ? action.payload.updatedBook
+          : book
+      );
+    });
+
+    builder.addCase(deleteBookFromCartAsync.fulfilled, (state, action) => {
+      state.cart = state.cart.filter(
+        (book) => book._id !== action.payload.deletedBook._id
+      );
+    });
+
+    builder.addCase(clearBooksFromCartAsync.fulfilled, (state) => {
+      state.cart = [];
+    });
+  },
+});
+
+export default cartSlice.reducer;

@@ -5,15 +5,15 @@ import { fetchBooks } from "../features/books/booksSlice";
 import { fetchCategories } from "../features/categories/categoriesSlice";
 import TopRated from "../features/toprated/TopRated";
 import Trending from "../features/trending/Trending";
+import { fetchOrderAsync } from "../features/orderhistory/orderHistorySlice";
 
 const Home = () => {
-  // configuring useDispatch for usage
   const dispatch = useDispatch();
 
-  // Fetching books and categories for population
   useEffect(() => {
     dispatch(fetchCategories());
     dispatch(fetchBooks());
+    dispatch(fetchOrderAsync());
   }, []);
 
   const { categories } = useSelector((state) => state.categories);
