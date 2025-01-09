@@ -76,7 +76,7 @@ const UserDetails = () => {
                 <span className="visually-hidden">Loading...</span>
               </div>
             )}
-            {error && <p>{error}</p>}
+            {/* {error && <p>{error}</p>} */}
             {addresses.length > 0 ? (
               <ul className="list-group w-50">
                 {addresses.map((address) => (
@@ -128,7 +128,7 @@ const UserDetails = () => {
                 <span className="visually-hidden">Loading...</span>
               </div>
             )}
-            {orderState.error && <p>{error}</p>}
+            {/* {orderState.error && <p>{error}</p>} */}
             {orderState.order && (
               <div>
                 <p className="fs-5 fw-semibold">
