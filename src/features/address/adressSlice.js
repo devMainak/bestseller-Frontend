@@ -69,6 +69,7 @@ export const addressSlice = createSlice({
         : "No address found";
     });
     builder.addCase(addNewAddressAsync.fulfilled, (state, action) => {
+      console.log(state.addresses);
       state.addresses = [...state.addresses, action.payload.savedAddress];
     });
     builder.addCase(updateAddressAsync.fulfilled, (state, action) => {
