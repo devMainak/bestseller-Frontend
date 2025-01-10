@@ -64,7 +64,9 @@ export const addressSlice = createSlice({
     });
     builder.addCase(fetchAddresses.rejected, (state, action) => {
       state.status = "error";
-      state.error = action.payload ? action.payload.address : "No address found";
+      state.error = action.payload
+        ? action.payload.address
+        : "No address found";
     });
     builder.addCase(addNewAddressAsync.fulfilled, (state, action) => {
       state.addresses.push(action.payload.savedAddress);

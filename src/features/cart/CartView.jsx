@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   fetchCart,
   updateBookInCartAsync,
@@ -24,11 +24,11 @@ import {
 const CartView = () => {
   const [alert, setAlert] = useState("");
   const [showMessage, setShowMessage] = useState(false);
-
-  const dispatch = useDispatch();
-
   const [shippingAddress, setShippingAddress] = useState("");
   const [showPriceDetails, setShowPriceDetails] = useState(false);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(fetchCart());
@@ -135,7 +135,7 @@ const CartView = () => {
   const placeOrderHandler = async () => {
     try {
       const booksIdDB = cart.map((item) => item.book._id);
-      console.log(booksIdDB);
+
       if (orderState.order) {
         const orderId = orderState.order._id;
         const orderData = {
@@ -153,8 +153,8 @@ const CartView = () => {
           setTimeout(() => {
             setShowMessage(false);
           }, 2000);
-          console.log(totalCartPrice);
           await dispatch(clearBooksFromCartAsync());
+          navigate("/user");
         }
       } else {
         const orderData = {
@@ -171,6 +171,7 @@ const CartView = () => {
             setShowMessage(false);
           }, 2000);
           await dispatch(clearBooksFromCartAsync());
+          navigate("/user");
         }
       }
     } catch (error) {
@@ -375,7 +376,7 @@ const CartView = () => {
                     onChange={handleShippingAddress}
                   >
                     <option value="">Select Shipping Address</option>
-                    {addresses.map((address) => (
+                    {addresses.length > 0 && addresses.map((address) => (
                       <option key={address._id} value={address._id}>
                         {address.houseNumber}, {address.street}, {address.city},{" "}
                         {address.state}, {address.country} -{" "}
