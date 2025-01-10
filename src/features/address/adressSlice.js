@@ -69,7 +69,7 @@ export const addressSlice = createSlice({
         : "No address found";
     });
     builder.addCase(addNewAddressAsync.fulfilled, (state, action) => {
-      state.addresses = [...state.addresses, action.payload.savedAddresses];
+      state.addresses = [...state.addresses, action.payload.savedAddress];
     });
     builder.addCase(updateAddressAsync.fulfilled, (state, action) => {
       state.addresses = state.addresses.map((address) =>
