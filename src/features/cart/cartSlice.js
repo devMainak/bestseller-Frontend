@@ -68,7 +68,6 @@ export const cartSlice = createSlice({
     });
 
     builder.addCase(fetchCart.fulfilled, (state, action) => {
-      console.log(action.payload);
       state.status = "success";
       state.cart = action.payload.cart || [];
     });
@@ -79,8 +78,7 @@ export const cartSlice = createSlice({
     });
 
     builder.addCase(addBookToCartAsync.fulfilled, (state, action) => {
-      console.log(state.cart);
-      state.cart.push(action.payload.savedBook);
+      state.cart = [...state.cart, action.payload.savedBook];
     });
 
     builder.addCase(updateBookInCartAsync.fulfilled, (state, action) => {
