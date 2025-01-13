@@ -60,7 +60,10 @@ export const addressSlice = createSlice({
     });
     builder.addCase(fetchAddresses.fulfilled, (state, action) => {
       state.status = "success";
-      state.addresses = action.payload ? action.payload : [];
+      state.addresses =
+        action.payload.addresses.length > 0
+          ? [...action.payload.addresses]
+          : [];
     });
     builder.addCase(fetchAddresses.rejected, (state, action) => {
       state.status = "error";
@@ -69,7 +72,6 @@ export const addressSlice = createSlice({
         : "No address found";
     });
     builder.addCase(addNewAddressAsync.fulfilled, (state, action) => {
-      console.log(state.addresses);
       state.addresses = [...state.addresses, action.payload.savedAddress];
     });
     builder.addCase(updateAddressAsync.fulfilled, (state, action) => {
