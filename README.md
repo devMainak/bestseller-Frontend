@@ -24,8 +24,9 @@ A responsive and dynamic bookstore application built using modern web technologi
 
 ### Frontend:
 - **React.js**: For building the user interface.
+- **React Router**: For client-side routing.
 - **Redux**: For state management.
-- **CSS/SCSS**: For styling.
+- **CSS/SCSS/Bootstrap**: For styling.
 
 ### Backend:
 - **Node.js**: For server-side JavaScript runtime.
