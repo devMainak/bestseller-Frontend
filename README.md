@@ -1,6 +1,6 @@
 # 📚 Bookstore Full-Stack Web App
 
-A responsive and dynamic bookstore application built using modern web technologies. This application allows users to browse, search, and purchase books, manage their shopping wishlis, carts, and handle user addresses. The app is powered by a **React + Redux** frontend and a **Node.js + Express.js** backend with **MongoDB** as the database.
+A responsive and dynamic bookstore application built using modern web technologies. This application allows users to browse, search, and purchase books, manage their shopping wishlist, cart, and handle user addresses. The app is powered by a **React + Redux** frontend and a **Node.js + Express.js** backend with **MongoDB** as the database.
 
 ---
 
